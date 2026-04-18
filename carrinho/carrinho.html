@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Carrinho | Giacomini</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="carrinho.css">
+</head>
+<body>
+    <header>
+        <a href="../index/index.html" class="logo-container">
+            <img src="../images.jfif" class="logo-img" onerror="this.src='../padrao.png'">
+            <span class="logo-texto">Giacomini</span>
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="topo-carrinho">
+            <a href="javascript:history.back()" class="btn-voltar"><i class="fas fa-arrow-left"></i> Continuar Comprando</a>
+            <h1>Meu Carrinho</h1>
+        </div>
+
+        <div id="lista-itens"></div>
+
+        <div class="area-total" id="area-total" style="display:none;">
+            <div class="total-texto">Total do Pedido:</div>
+            <div class="total-valor" id="valor-total">R$ 0,00</div>
+            <a href="#" class="btn-whatsapp" onclick="enviarWhatsApp()"><i class="fab fa-whatsapp"></i> Fechar Pedido na Loja</a>
+        </div>
+    </div>
+
+    <script src="carrinho.js"></script>
+</body>
+</html>
