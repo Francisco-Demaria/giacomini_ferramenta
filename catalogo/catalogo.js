@@ -6,16 +6,13 @@ function atualizarContador() {
     if(contador) contador.innerText = carrinho.length;
 }
 
-// Adicionado a função de busca para a barra superior
 function fazerBusca() {
     let termo = document.getElementById('input-busca').value;
     if(termo.trim() !== '') {
-        // Como já estamos na página de catálogo, apenas recarregamos ela com o parâmetro
         window.location.href = 'catalogo.html?busca=' + encodeURIComponent(termo);
     }
 }
 
-// Função que troca entre o catálogo de peças e máquinas
 function mudarCatalogo(tipo) {
     document.getElementById('sessao-maquinas').style.display = tipo === 'maquinas' ? 'block' : 'none';
     document.getElementById('sessao-pecas').style.display = tipo === 'pecas' ? 'block' : 'none';
@@ -26,7 +23,6 @@ function mudarCatalogo(tipo) {
 
 function criarCartao(p) {
     let img = p.img;
-    // Ajuste de caminho de imagem para ../img/ ou ../padrao.png
     if (img !== '' && !img.startsWith('http') && !img.startsWith('../img/')) { img = '../img/' + img; }
     if (img === '') img = '../padrao.png';
 
@@ -57,7 +53,7 @@ async function carregarCatalogo() {
 
         let produtos = linhas.map(linha => {
             const col = linha.split(',');
-            if (col.length < 4) return null; // Tolerante a colunas vazias
+            if (col.length < 4) return null; 
             
             return {
                 nome: col[0] ? col[0].trim() : '',
@@ -71,18 +67,34 @@ async function carregarCatalogo() {
             };
         }).filter(p => p !== null && p.estoque > 0);
 
+        // --- INÍCIO DA LÓGICA DE BUSCA ---
+        // Verifica se existe o parâmetro "?busca=" na URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const termoBusca = urlParams.get('busca');
+
+        if (termoBusca) {
+            const termoMinusculo = termoBusca.toLowerCase();
+            // Filtra os produtos onde o NOME ou a DESCRIÇÃO contenham o termo pesquisado
+            produtos = produtos.filter(p => 
+                p.nome.toLowerCase().includes(termoMinusculo) || 
+                p.descricao.toLowerCase().includes(termoMinusculo)
+            );
+            
+            // Opcional: Mostra para o usuário o que ele pesquisou na tela (se quiser adicionar um elemento HTML depois)
+            console.log("Mostrando resultados para:", termoBusca);
+        }
+        // --- FIM DA LÓGICA DE BUSCA ---
+
         const maquinas = produtos.filter(p => !p.categoria.toLowerCase().includes('peça') && !p.categoria.toLowerCase().includes('peca'));
         const pecas = produtos.filter(p => p.categoria.toLowerCase().includes('peça') || p.categoria.toLowerCase().includes('peca'));
 
         const containerMaquinas = document.getElementById('lista-maquinas');
         const containerPecas = document.getElementById('container-grupos-pecas');
 
-        // 1. Renderiza Máquinas
         if (containerMaquinas) {
-            containerMaquinas.innerHTML = maquinas.length > 0 ? maquinas.map(p => criarCartao(p)).join('') : '<p style="width:100%; text-align:center;">Nenhuma máquina encontrada.</p>';
+            containerMaquinas.innerHTML = maquinas.length > 0 ? maquinas.map(p => criarCartao(p)).join('') : '<p style="width:100%; text-align:center;">Nenhum resultado encontrado.</p>';
         }
 
-        // 2. Renderiza Peças (Sanfona de Subcategorias)
         if (containerPecas) {
             if (pecas.length > 0) {
                 let grupos = {};
@@ -94,7 +106,7 @@ async function carregarCatalogo() {
 
                 let htmlGrupos = '';
                 for (let subcat in grupos) {
-                    let idSubcat = subcat.replace(/[^a-zA-Z0-9]/g, '').toLowerCase(); // Garante IDs válidos
+                    let idSubcat = subcat.replace(/[^a-zA-Z0-9]/g, '').toLowerCase(); 
                     
                     htmlGrupos += `
                     <div>
@@ -120,7 +132,7 @@ async function carregarCatalogo() {
                 }
                 containerPecas.innerHTML = htmlGrupos;
             } else {
-                containerPecas.innerHTML = '<p style="text-align:center;">Nenhuma peça encontrada.</p>';
+                containerPecas.innerHTML = '<p style="text-align:center;">Nenhum resultado encontrado.</p>';
             }
         }
 
@@ -135,5 +147,7 @@ function abrirSubcategoria(id) {
         conteudo.classList.toggle('ativo');
     }
 }
+
+window.onload = () => { carregarCatalogo(); atualizarContador(); };
 
 window.onload = () => { carregarCatalogo(); atualizarContador(); };
