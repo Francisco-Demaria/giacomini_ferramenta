@@ -54,3 +54,4 @@ function enviarWhatsApp() {
 }
 
 window.onload = renderizarCarrinho;
+window.onload = renderizarCarrinho;
