@@ -43,6 +43,53 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
 .seta-slider:hover { background: rgba(0,0,0,0.7); }
 .seta-esq { left: 20px; } .seta-dir { right: 20px; }
 
+/* --- HERO SLIDER (IMAGENS POR SLIDE) --- */ 
+.hero-container { 
+    position: relative;
+    width: 100%; 
+    height: 500px; 
+    overflow: hidden; 
+    /* Cor de fundo padrão caso a imagem falhe */ 
+    background: var(--verde-principal);
+} 
+
+.slider-wrapper { 
+    position: relative; 
+    display: flex; 
+    width: 100%; 
+    height: 100%; 
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    z-index: 1;
+} 
+
+.slide { 
+    min-width: 100%; 
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    text-align: center; 
+    position: relative; 
+    background-size: cover;
+    background-position: center; 
+    overflow: hidden;
+}
+
+/* Película e Texto (caso não tenhas guardado) */
+.camada-verde-slide {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(22, 110, 54, 0.6); /* O tom verde por cima das imagens */
+    z-index: 2;
+}
+
+.conteudo-slide {
+    position: relative;
+    z-index: 3;
+    color: white;
+    max-width: 800px;
+    padding: 20px;
+}
+
 /* SEÇÕES E GRID */
 .secao { max-width: 1200px; margin: 80px auto; padding: 0 20px; text-align: center;}
 .titulo-secao { font-size: 2.2em; color: var(--verde-principal); text-transform: uppercase; font-weight: 900; margin-bottom: 50px; letter-spacing: 1px;}
