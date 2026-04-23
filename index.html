@@ -16,7 +16,7 @@
             <i class="fas fa-bars" style="font-size: 1.5em;"></i> Menu
         </button>
         <a href="index.html" class="logo-container">
-            <img src="images.jfif" class="logo-img" alt="Giacomini" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Logo';">
+            <img src="img/images.jpg" class="logo-img" alt="Giacomini" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Logo';">
             <span class="logo-texto">Giacomini</span>
         </a>
         <a href="carrinho/carrinho.html" class="icone-carrinho-topo">
@@ -35,21 +35,33 @@
     <div class="hero-container">
         <button class="seta-slider seta-esq" onclick="mudarSlide(-1)"><i class="fas fa-chevron-left"></i></button>
         <button class="seta-slider seta-dir" onclick="mudarSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        
         <div class="slider-wrapper" id="slider-wrapper">
-            <div class="slide">
-                <h1>O Motor do Seu Negócio</h1>
-                <p>Peças originais e máquinas de alta precisão para profissionais exigentes.</p>
-                <a href="catalogo/catalogo.html" class="btn-hero">Ver Catálogo</a>
+            <div class="slide" style="background-image: url('img/img_3.jpg');">
+                <div class="camada-verde-slide"></div>
+                <div class="conteudo-slide">
+                    <h1>O Motor do Seu Negócio</h1>
+                    <p>Peças originais e máquinas de alta precisão para profissionais exigentes.</p>
+                    <a href="catalogo/catalogo.html" class="btn-hero">Ver Catálogo</a>
+                </div>
             </div>
-            <div class="slide">
-                <h1>Tradição & Confiança</h1>
-                <p>Anos de experiência entregando excelência em manutenção em Joinville.</p>
-                <a href="sobre/sobre.html" class="btn-hero">Nossa História</a>
+            
+            <div class="slide" style="background-image: url('img/img_2.jpg');">
+                <div class="camada-verde-slide"></div>
+                <div class="conteudo-slide">
+                    <h1>Tradição & Confiança</h1>
+                    <p>Anos de experiência entregando excelência em manutenção em Joinville.</p>
+                    <a href="sobre/sobre.html" class="btn-hero">Nossa História</a>
+                </div>
             </div>
-            <div class="slide">
-                <h1>Ofertas Imperdíveis</h1>
-                <p>As melhores marcas com descontos exclusivos. Não deixe a obra parar.</p>
-                <a href="#promocoes" class="btn-hero">Ver Promoções</a>
+            
+            <div class="slide" style="background-image: url('img/img_1.jpg');">
+                <div class="camada-verde-slide"></div>
+                <div class="conteudo-slide">
+                    <h1>Ofertas Imperdíveis</h1>
+                    <p>As melhores marcas com descontos exclusivos. Não deixe a obra parar.</p>
+                    <a href="#promocoes" class="btn-hero">Ver Promoções</a>
+                </div>
             </div>
         </div>
     </div>
@@ -103,7 +115,6 @@
                 <img src="img/makita.webp" alt="Makita" class="img-marca">
                 <img src="img/bosch.webp" alt="Bosch" class="img-marca">
                 <img src="img/dewalt.webp" alt="DeWalt" class="img-marca">
-                <img src="img/einhell.webp" alt="Einhell" class="img-marca">
                 <img src="img/milwaukee.webp" alt="Milwaukee" class="img-marca">
                 <img src="img/skil.webp" alt="Skil" class="img-marca">
                 <img src="img/stanley.webp" alt="Stanley" class="img-marca">
@@ -111,7 +122,6 @@
                 <img src="img/makita.webp" alt="Makita" class="img-marca">
                 <img src="img/bosch.webp" alt="Bosch" class="img-marca">
                 <img src="img/dewalt.webp" alt="DeWalt" class="img-marca">
-                <img src="img/einhell.webp" alt="Einhell" class="img-marca">
                 <img src="img/milwaukee.webp" alt="Milwaukee" class="img-marca">
                 <img src="img/skil.webp" alt="Skil" class="img-marca">
                 <img src="img/stanley.webp" alt="Stanley" class="img-marca">
@@ -134,16 +144,31 @@
     </a>
 
     <footer>
-        <h3>Giacomini Ferramentas</h3>
-        <p>Soluções Industriais e Profissionais de Alta Performance - Joinville/SC</p>
+        <h3 style="font-size: 1.8em; margin-bottom: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">Giacomini Ferramentas</h3>
+        <p style="margin-bottom: 5px;">Soluções Industriais e Profissionais de Alta Performance - Joinville/SC</p>
+        
+        <div style="margin-top: 15px; margin-bottom: 10px; font-size: 1.05em; color: #ddd;">
+            <p style="margin-bottom: 5px;"><i class="fab fa-whatsapp" style="color: var(--verde-destaque); margin-right: 5px;"></i> (47) 98905-0263</p>
+            <p><i class="far fa-envelope" style="color: var(--verde-destaque); margin-right: 5px;"></i> giacomini.adm@outlook.com</p>
+        </div>
+        
         <div class="social-links">
             <a href="https://wa.me/5547989050263" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.instagram.com/giacominimanutencao/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
             <a href="https://www.facebook.com/giacominimanutencao/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="mailto:giacomini.adm@outlook.com" target="_blank" title="E-mail"><i class="far fa-envelope"></i></a>
         </div>
+        
         <div class="linha-rodape"></div>
-        <p style="opacity: 0.6; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px;">© 2026 Giacomini. Todos os direitos reservados.</p>
+        
+        <div style="font-size: 1.0em; color: #888; line-height: 1.6;">
+            <p>&copy; 2026 GIACOMINI - TODOS OS DIREITOS RESERVADOS.</p>
+            <p style="margin-top: 5px; opacity: 0.7;">Desenvolvido por <strong>Francisco</strong> | <strong>demariafranciscodemelo@gmail.com</strong></p>
+        </div>
     </footer>
+
+
+
 
     <script src="index.js"></script>
 </body>
