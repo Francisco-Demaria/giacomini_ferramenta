@@ -24,31 +24,45 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
 .topo-catalogo { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;}
 .titulo-secao { font-size: 2.2em; color: var(--verde-principal); text-transform: uppercase; font-weight: 900; margin: 0 auto;}
 
-.cartao-produto {
-    background: white;
-    padding: 25px; /* Isso garante o espaço igual nas bordas (topo, base e lados) */
-    text-align: center;
-    border: 1px solid var(--borda);
-    border-radius: 8px;
-    text-decoration: none;
-    color: inherit;
-    transition: 0.3s;
-    
-    /* A MÁGICA DO ALINHAMENTO: */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Empurra a foto pra cima e o botão pro fundo */
-    align-items: center;
-    height: 100%; 
-    gap: 15px; /* Força um espaço mínimo entre a foto, o título e o preço */
+/* GRID INTELIGENTE: 2 por linha no celular, vários no PC */
+.grid-produtos {
+    display: grid;
+    /* 140px garante que caibam 2 na tela do celular. No PC, ele expande. */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+    gap: 15px;
+    align-items: start; /* Impede que o cartão estique para baixo sem necessidade */
 }
 
-/* Garante que a imagem não esmague o texto */
+/* DEIXANDO O CARTÃO MAIS BAIXO E PROPORCIONAL */
+.cartao-produto {
+    background: white;
+    padding: 15px; /* Menos borda = menos esticado */
+    text-align: center;
+    border: 1px solid var(--borda, #ddd);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* LIMITANDO A FOTO PARA NÃO FICAR GIGANTE */
 .cartao-produto img {
     width: 100%;
-    height: 180px; 
-    object-fit: contain; /* Mostra a foto inteira sem cortar */
+    height: 130px; /* Deixa a imagem mais baixa */
+    object-fit: contain; 
     margin: 0 auto;
+}
+
+/* DEIXANDO O PREÇO E BOTÃO PROPORCIONAIS NO CELULAR */
+.cartao-produto h3 {
+    font-size: 0.95em; /* Título um pouco menor */
+    margin: 5px 0;
+}
+
+.cartao-produto .btn-comprar {
+    padding: 8px;
+    font-size: 0.85em;
 }
 .selo-desconto { position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; padding: 6px 12px; font-size: 0.85em; font-weight: 900; border-radius: 3px; letter-spacing: 1px;}
 .cartao-produto h3 { flex-grow: 1; display: flex; align-items: flex-start; justify-content: center; min-height: 48px; font-size: 1.1em; margin-bottom: 10px; color: var(--grafite); line-height: 1.4; font-weight: bold;}
