@@ -1,4 +1,5 @@
 const URL_PLANILHA = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjwdcNetNoRZzXi20wyCVlMwhQf86ckoI8ZcIDui7wnvQpxUg7NIAio6HEu_CMHqyG1yT4Rcee_q6H/pub?output=csv';
+let todosOsProdutosDaPlanilha = []; 
 
 function atualizarContador() {
     let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
@@ -194,15 +195,13 @@ function ordenarProdutos(tipoOrdenacao) {
     container.innerHTML = maquinasOrdenadas.map(p => criarCartao(p)).join('');
 }
 
-// Variável global para guardar todos os produtos limpos da planilha
-let todosOsProdutosDaPlanilha = []; 
 
 // NOTA: Na sua função carregarCatalogo(), logo após montar a lista 'produtos', 
 // você precisa salvar eles nesta variável global:
 // todosOsProdutosDaPlanilha = [...produtos];
 
 window.aplicarSuperFiltro = function() {
-    let produtosFiltrados = [...todosOsProdutosDaPlanilha];
+    let produtosFiltrados = [...produtos];
 
     // 1. Pegar o que o usuário marcou nos filtros
     const ordem = document.getElementById('filtro-ordem').value;
