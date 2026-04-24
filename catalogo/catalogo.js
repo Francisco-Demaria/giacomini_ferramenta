@@ -194,4 +194,49 @@ function ordenarProdutos(tipoOrdenacao) {
     container.innerHTML = maquinasOrdenadas.map(p => criarCartao(p)).join('');
 }
 
+// Variável global para guardar todos os produtos limpos da planilha
+let todosOsProdutosDaPlanilha = []; 
+
+// NOTA: Na sua função carregarCatalogo(), logo após montar a lista 'produtos', 
+// você precisa salvar eles nesta variável global:
+// todosOsProdutosDaPlanilha = [...produtos];
+
+window.aplicarSuperFiltro = function() {
+    let produtosFiltrados = [...todosOsProdutosDaPlanilha];
+
+    // 1. Pegar o que o usuário marcou nos filtros
+    const ordem = document.getElementById('filtro-ordem').value;
+    const categoriaEscolhida = document.querySelector('input[name="cat"]:checked').value;
+    const bateriaEscolhida = document.querySelector('input[name="bat"]:checked').value;
+
+    // 2. Filtrar por Categoria
+    if (categoriaEscolhida !== 'todas') {
+        produtosFiltrados = produtosFiltrados.filter(p => p.categoria.toLowerCase().includes(categoriaEscolhida));
+    }
+
+    // 3. Filtrar por Voltagem (Busca no nome ou descrição)
+    if (bateriaEscolhida !== 'todas') {
+        produtosFiltrados = produtosFiltrados.filter(p => 
+            p.nome.toLowerCase().includes(bateriaEscolhida) || 
+            p.descricao.toLowerCase().includes(bateriaEscolhida)
+        );
+    }
+
+    // 4. Ordenar Preços
+    if (ordem === 'menor-preco') {
+        produtosFiltrados.sort((a, b) => a.preco - b.preco);
+    } else if (ordem === 'maior-preco') {
+        produtosFiltrados.sort((a, b) => b.preco - a.preco);
+    }
+
+    // 5. Jogar na tela (Você deve apontar para o ID do seu grid principal)
+    const containerGrid = document.getElementById('lista-maquinas'); // ou o ID que você usa para o catálogo todo
+    
+    if (containerGrid) {
+        containerGrid.innerHTML = produtosFiltrados.length > 0 
+            ? produtosFiltrados.map(p => criarCartao(p)).join('') 
+            : '<p style="width:100%; text-align:center; padding: 50px;">Nenhum produto encontrado com estes filtros.</p>';
+    }
+};
+
 window.onload = () => { carregarCatalogo(); atualizarContador(); };
