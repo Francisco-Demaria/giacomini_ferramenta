@@ -15,19 +15,43 @@ function fazerBusca() {
 function abrirMenu() { document.getElementById('menu-lateral').classList.add('aberto'); document.getElementById('overlay').style.display = 'block'; }
 function fecharMenu() { document.getElementById('menu-lateral').classList.remove('aberto'); document.getElementById('overlay').style.display = 'none'; }
 
-let slideIndex = 0; let timer;
+let slideIndex = 0;
+
+let currentSlide = 0;
+const wrapper = document.getElementById('slider-wrapper');
+const slides = document.querySelectorAll('.slide');
+const totalOriginalSlides = slides.length;
+
+// MÁGICA DO CÉREBRO: Clonamos o primeiro slide e colocamos no fim
+const firstClone = slides[0].cloneNode(true);
+wrapper.appendChild(firstClone);
+
 function mudarSlide(n) {
-    let slides = document.querySelectorAll('.slide');
-    if(slides.length === 0) return;
-    slideIndex += n;
-    if (slideIndex >= slides.length) slideIndex = 0;
-    if (slideIndex < 0) slideIndex = slides.length - 1;
-    document.getElementById('slider-wrapper').style.transform = `translateX(-${slideIndex * 100}%)`;
-    resetarTimer();
+    currentSlide += n;
+    wrapper.style.transition = "transform 0.7s ease-in-out";
+    wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+    // Se chegou no clone (fim), volta pro início REAL sem o usuário ver
+    if (currentSlide >= totalOriginalSlides) {
+        setTimeout(() => {
+            wrapper.style.transition = "none";
+            currentSlide = 0;
+            wrapper.style.transform = `translateX(0)`;
+        }, 700); // tempo da transição
+    }
+    
+    // Se for para trás do primeiro
+    if (currentSlide < 0) {
+        setTimeout(() => {
+            wrapper.style.transition = "none";
+            currentSlide = totalOriginalSlides - 1;
+            wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }, 700);
+    }
 }
-function autoSlide() { mudarSlide(1); }
-function resetarTimer() { clearInterval(timer); timer = setInterval(autoSlide, 5000); }
-resetarTimer();
+
+// Roda sozinho igual a esteira das marcas
+setInterval(() => mudarSlide(1), 5000);
 
 function criarCartao(p) {
     let img = p.img;
