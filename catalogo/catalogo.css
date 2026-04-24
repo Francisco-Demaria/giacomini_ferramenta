@@ -24,45 +24,59 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
 .topo-catalogo { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;}
 .titulo-secao { font-size: 2.2em; color: var(--verde-principal); text-transform: uppercase; font-weight: 900; margin: 0 auto;}
 
-/* GRID INTELIGENTE: 2 por linha no celular, vários no PC */
+/* Grid Responsivo - 2 por linha no celular, 3 a 4 no PC */
 .grid-produtos {
     display: grid;
-    /* 140px garante que caibam 2 na tela do celular. No PC, ele expande. */
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-    gap: 15px;
-    align-items: start; /* Impede que o cartão estique para baixo sem necessidade */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 20px;
+    align-items: stretch; /* Força todos os cartões da mesma linha a terem a mesma altura */
 }
 
-/* DEIXANDO O CARTÃO MAIS BAIXO E PROPORCIONAL */
+/* O Cartão */
 .cartao-produto {
-    background: white;
-    padding: 15px; /* Menos borda = menos esticado */
-    text-align: center;
-    border: 1px solid var(--borda, #ddd);
+    background: #ffffff;
+    border: 1px solid #ebebeb;
     border-radius: 8px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 10px;
+    transition: box-shadow 0.2s ease-in-out;
+    text-decoration: none;
+    color: #333;
 }
 
-/* LIMITANDO A FOTO PARA NÃO FICAR GIGANTE */
+/* Efeito de sombra ao passar o mouse (igual Mercado Livre) */
+.cartao-produto:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Imagem padronizada */
 .cartao-produto img {
     width: 100%;
-    height: 130px; /* Deixa a imagem mais baixa */
-    object-fit: contain; 
-    margin: 0 auto;
+    height: 160px;
+    object-fit: contain;
+    margin-bottom: 15px;
 }
 
-/* DEIXANDO O PREÇO E BOTÃO PROPORCIONAIS NO CELULAR */
+/* Título flexível (ocupa o espaço vazio para empurrar o preço pra baixo) */
 .cartao-produto h3 {
-    font-size: 0.95em; /* Título um pouco menor */
-    margin: 5px 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
+    margin: 0 0 10px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Corta no máximo em 2 linhas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1; 
 }
 
-.cartao-produto .btn-comprar {
-    padding: 8px;
-    font-size: 0.85em;
+/* Preço */
+.cartao-produto .preco {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
 }
 .selo-desconto { position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; padding: 6px 12px; font-size: 0.85em; font-weight: 900; border-radius: 3px; letter-spacing: 1px;}
 .cartao-produto h3 { flex-grow: 1; display: flex; align-items: flex-start; justify-content: center; min-height: 48px; font-size: 1.1em; margin-bottom: 10px; color: var(--grafite); line-height: 1.4; font-weight: bold;}
