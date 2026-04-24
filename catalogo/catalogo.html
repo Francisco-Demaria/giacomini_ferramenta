@@ -9,12 +9,6 @@
     <link rel="stylesheet" href="catalogo.css">
 </head>
 <body>
-    <select onchange="ordenarProdutos(this.value)" style="padding: 10px; border-radius: 5px;">
-        <option value="">Ordenar por...</option>
-        <option value="menor-preco">Menor Preço</option>
-        <option value="maior-preco">Maior Preço</option>
-        <option value="a-z">Ordem Alfabética</option>
-    </select>
 
     <header>
         <a href="../index.html" class="logo-container">
@@ -26,6 +20,13 @@
             <span id="contador-carrinho" class="badge-carrinho">0</span>
         </a>
     </header>
+
+    <select onchange="ordenarProdutos(this.value)" style="padding: 10px; border-radius: 5px;">
+        <option value="">Ordenar por...</option>
+        <option value="menor-preco">Menor Preço</option>
+        <option value="maior-preco">Maior Preço</option>
+        <option value="a-z">Ordem Alfabética</option>
+    </select>
 
     <div class="faixa-pesquisa">
         <div class="box-pesquisa">
