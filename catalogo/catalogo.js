@@ -174,5 +174,24 @@ window.filtrarMaquinas = function(sub, btn) {
     carregarCatalogo(sub); 
 }
 
+// Função para ordenar os produtos que já estão na tela
+function ordenarProdutos(tipoOrdenacao) {
+    // Pega as máquinas que já estão filtradas
+    let maquinasOrdenadas = [...maquinas]; // Faz uma cópia para não estragar a original
+
+    if (tipoOrdenacao === 'menor-preco') {
+        maquinasOrdenadas.sort((a, b) => a.preco - b.preco); // Do barato pro caro
+    } 
+    else if (tipoOrdenacao === 'maior-preco') {
+        maquinasOrdenadas.sort((a, b) => b.preco - a.preco); // Do caro pro barato
+    }
+    else if (tipoOrdenacao === 'a-z') {
+        maquinasOrdenadas.sort((a, b) => a.nome.localeCompare(b.nome)); // Ordem alfabética
+    }
+
+    // Renderiza novamente na tela
+    const container = document.getElementById('lista-maquinas');
+    container.innerHTML = maquinasOrdenadas.map(p => criarCartao(p)).join('');
+}
 
 window.onload = () => { carregarCatalogo(); atualizarContador(); };
