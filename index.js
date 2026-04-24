@@ -63,31 +63,53 @@ async function carregarDados() {
         const linhas = dadosTexto.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
 
         let produtos = linhas.map(linha => {
-            const col = linha.split(',');
+            // A MÁGICA PARA NÃO QUEBRAR OS PRODUTOS:
+            // Essa Regex ignora as vírgulas que estão dentro de textos com aspas
+            const regexCSV = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+            const col = linha.split(regexCSV);
+            
             if (col.length < 8) return null;
 
             return {
-                nome: col[0] ? col[0].trim() : '',
-                categoria: col[1] ? col[1].trim() : '',
-                subcategoria: col[2] ? col[2].trim() : '',
+                // O replace tira as aspas extras que o Google Sheets coloca e mantém limpo
+                nome: col[0] ? col[0].trim().replace(/^"|"$/g, '') : '',
+                categoria: col[1] ? col[1].trim().replace(/^"|"$/g, '') : '',
+                subcategoria: col[2] ? col[2].trim().replace(/^"|"$/g, '') : '',
                 preco: parseFloat(col[3]) || 0,
                 precoAntigo: parseFloat(col[4]) || 0,
-                img: col[5] ? col[5].trim() : '',
+                img: col[5] ? col[5].trim().replace(/^"|"$/g, '') : '',
                 estoque: parseInt(col[6]) || 0,
-                descricao: col[7] ? col[7].trim() : ''
+                descricao: col[7] ? col[7].trim().replace(/^"|"$/g, '').replace(/<br>/gi, '<br>') : ''
             };
         }).filter(p => p !== null && p.estoque > 0);
 
-        let gridDest = document.getElementById('grid-destaques');
-        if(gridDest) gridDest.innerHTML = produtos.slice(0, 4).map(p => criarCartao(p)).join('');
+        // Removemos as peças da vitrine inicial
+        produtos = produtos.filter(p => !p.categoria.toLowerCase().includes('peça') && !p.categoria.toLowerCase().includes('peca'));
+
+        // 1. DESTAQUES: Do menor estoque para o maior (gatilho de urgência) e embaralha empates
+        let destaques = [...produtos].sort((a, b) => {
+            if (a.estoque === b.estoque) return Math.random() - 0.5;
+            return a.estoque - b.estoque;
+        }).slice(0, 3);
         
-        let lancamentos = produtos.slice(-4).reverse();
+        let gridDest = document.getElementById('grid-destaques');
+        if(gridDest) gridDest.innerHTML = destaques.length > 0 ? destaques.map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhum destaque no momento.</p>";
+
+        // 2. LANÇAMENTOS: Os 4 últimos cadastrados na planilha
+        let lancamentos = [...produtos].reverse().slice(0, 3);
         let gridLanc = document.getElementById('grid-lancamentos');
         if(gridLanc) gridLanc.innerHTML = lancamentos.length > 0 ? lancamentos.map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhum lançamento recente.</p>";
+
+        // 3. PROMOÇÕES: Maior porcentagem real de desconto primeiro
+        let promocoes = [...produtos].filter(p => p.precoAntigo > p.preco);
+        promocoes = promocoes.sort((a, b) => {
+            let descontoA = ((a.precoAntigo - a.preco) / a.precoAntigo) * 100;
+            let descontoB = ((b.precoAntigo - b.preco) / b.precoAntigo) * 100;
+            return descontoB - descontoA; // Maior desconto no topo
+        }).slice(0, 3);
         
-        let promocoes = produtos.filter(p => p.precoAntigo > p.preco);
         let gridProm = document.getElementById('grid-promocoes');
-        if(gridProm) gridProm.innerHTML = promocoes.length > 0 ? promocoes.slice(0, 4).map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhuma oferta ativa no momento.</p>";
+        if(gridProm) gridProm.innerHTML = promocoes.length > 0 ? promocoes.map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhuma oferta ativa no momento.</p>";
 
     } catch (erro) {
         console.error("Erro na planilha", erro);
