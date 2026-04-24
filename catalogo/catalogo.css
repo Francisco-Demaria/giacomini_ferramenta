@@ -24,10 +24,33 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
 .topo-catalogo { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;}
 .titulo-secao { font-size: 2.2em; color: var(--verde-principal); text-transform: uppercase; font-weight: 900; margin: 0 auto;}
 
-.cartao-produto { background: white; border: 1px solid var(--borda); padding: 25px; border-radius: 8px; text-align: center; transition: 0.3s; position: relative; display: flex; flex-direction: column; height: 100%; justify-content: space-between;}
-.cartao-produto:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--verde-principal); transform: translateY(-5px);}
+.cartao-produto {
+    background: white;
+    padding: 25px; /* Isso garante o espaço igual nas bordas (topo, base e lados) */
+    text-align: center;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: 0.3s;
+    
+    /* A MÁGICA DO ALINHAMENTO: */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Empurra a foto pra cima e o botão pro fundo */
+    align-items: center;
+    height: 100%; 
+    gap: 15px; /* Força um espaço mínimo entre a foto, o título e o preço */
+}
+
+/* Garante que a imagem não esmague o texto */
+.cartao-produto img {
+    width: 100%;
+    height: 180px; 
+    object-fit: contain; /* Mostra a foto inteira sem cortar */
+    margin: 0 auto;
+}
 .selo-desconto { position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; padding: 6px 12px; font-size: 0.85em; font-weight: 900; border-radius: 3px; letter-spacing: 1px;}
-.cartao-produto img { height: 180px; width: 100%; object-fit: contain; margin-bottom: 15px; }
 .cartao-produto h3 { flex-grow: 1; display: flex; align-items: flex-start; justify-content: center; min-height: 48px; font-size: 1.1em; margin-bottom: 10px; color: var(--grafite); line-height: 1.4; font-weight: bold;}
 .preco-antigo { text-decoration: line-through; color: #999; font-size: 0.9em; min-height: 1.2em;}
 .preco-atual { color: var(--verde-principal); font-size: 2em; font-weight: 900; margin-bottom: 15px; margin-top: auto;}
