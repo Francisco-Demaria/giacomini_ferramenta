@@ -98,3 +98,47 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
     .item-peca-simples > div { width: 100%; } 
     .item-peca-simples .direita { text-align: left !important; }
 }
+
+/* 1. Torna o layout flexível para telas menores */
+.layout-catalogo {
+    display: flex;
+    max-width: 100%; /* Muda de 1200px para 100% */
+    margin: 20px auto;
+    padding: 0 5%;
+    gap: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap; /* MÁGICA: Se não couber, o menu vai para cima e os produtos para baixo */
+}
+
+/* 2. Ajusta o menu lateral */
+.menu-lateral-filtros {
+    width: 250px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 80px; /* Fica fixo ao rolar a página */
+}
+
+/* 3. Garante que o conteúdo principal use o resto do espaço */
+.conteudo-principal {
+    flex: 1;
+    min-width: 300px; /* Não deixa espremer demais */
+}
+
+/* 4. O Grid de produtos agora ajusta o número de colunas sozinho */
+.grid-produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Cabe mais produtos por linha em telas grandes e menos em pequenas */
+    gap: 20px;
+}
+
+/* Media Query: Se a tela for muito pequena (telemóvel), o menu fica em cima */
+@media (max-width: 768px) {
+    .layout-catalogo {
+        flex-direction: column;
+    }
+    .menu-lateral-filtros {
+        width: 100%;
+        position: relative;
+        top: 0;
+    }
+}
