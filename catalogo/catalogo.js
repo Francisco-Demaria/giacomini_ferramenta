@@ -148,4 +148,31 @@ function abrirSubcategoria(id) {
     }
 }
 
+// Função para criar os botões de filtro baseados no que está na planilha
+function criarBotoesFiltro(produtosMaquinas) {
+    const areaFiltros = document.getElementById('filtros-subcategoria');
+    if (!areaFiltros) return;
+
+    // Pega todas as subcategorias únicas das máquinas
+    const subs = [...new Set(produtosMaquinas.map(p => p.subcategoria).filter(s => s !== ""))];
+
+    let html = `<button class="btn-filtro-sub ativo" onclick="filtrarMaquinas('todas', this)">Todas</button>`;
+    subs.forEach(sub => {
+        html += `<button class="btn-filtro-sub" onclick="filtrarMaquinas('${sub}', this)">${sub}</button>`;
+    });
+
+    areaFiltros.innerHTML = html;
+}
+
+// Função que filtra as máquinas na tela
+window.filtrarMaquinas = function(sub, btn) {
+    // Muda a cor do botão ativo
+    document.querySelectorAll('.btn-filtro-sub').forEach(b => b.classList.remove('ativo'));
+    btn.classList.add('ativo');
+
+    // Aqui usamos a lógica de carregar apenas o que coincide
+    carregarCatalogo(sub); 
+}
+
+
 window.onload = () => { carregarCatalogo(); atualizarContador(); };
