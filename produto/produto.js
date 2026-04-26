@@ -101,7 +101,7 @@ async function carregarProduto() {
                         <p style="color: #666; font-size: 0.9em; margin-bottom: 5px;">Por apenas:</p>
                         <div style="color: var(--verde-principal); font-size: 2.5em; font-weight: 900; line-height: 1;">
                             R$ ${produto.preco.toFixed(2).replace('.', ',')}
-                            <small style="font-size: 0.4em; color: #666; display: block; font-weight: normal; margin-top: 5px;">À VISTA NO PIX OU BOLETO</small>
+                            <small style="font-size: 0.4em; color: #666; display: block; font-weight: normal; margin-top: 5px;">À VISTA</small>
                         </div>
                         
                         <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dotted #ccc;">
