@@ -14,30 +14,34 @@ function fazerBusca() {
 
 function criarCartao(p) {
     let img = p.img;
-    if (img !== '' && !img.startsWith('http') && !img.startsWith('../img/')) { img = '../img/' + img; }
-    if (img === '') img = '../padrao.png';
+    if (img !== '' && !img.startsWith('http') && !img.startsWith('img/')) { img = 'img/' + img; }
+    if (img === '') img = 'padrao.png';
 
-    // CÁLCULO DOS PREÇOS (Baseado no custo da planilha)
-    // À vista: Custo * 1.35 e arredonda para baixo + 0.99
-    let precoAVista = Math.floor(p.preco * 1.35) + 0.99;
-    // Parcelado: Custo * 1.45 e arredonda para baixo + 0.99
-    let precoParcelado = Math.floor(p.preco * 1.45) + 0.99;
+    // LÓGICA DE PREÇOS
+    let custo = parseFloat(p.preco);
+    let precoTabela = Math.floor(custo * 1.65) + 0.99; // Preço "De:" (Sugestão de desconto)
+    let precoAVista = Math.floor(custo * 1.35) + 0.99; // Preço "Por:"
+    let precoParcelado = Math.floor(custo * 1.45) + 0.99;
     let valorParcela = (precoParcelado / 5).toFixed(2).replace('.', ',');
 
     return `
-        <a href="../produto/produto.html?nome=${encodeURIComponent(p.nome)}" style="text-decoration:none; color:inherit;">
+        <a href="produto/produto.html?nome=${encodeURIComponent(p.nome)}" style="text-decoration:none; color:inherit;">
             <div class="cartao-produto">
-                <img src="${img}" alt="${p.nome}" onerror="this.src='../padrao.png'">
+                <div class="selo-desconto">OFERTA</div>
+                <img src="${img}" alt="${p.nome}" onerror="this.src='padrao.png'">
                 <h3>${p.nome}</h3>
                 
                 <div class="precos-container" style="margin-top: auto; text-align: center;">
-                    <div style="color: #666; font-size: 0.85em;">À vista</div>
+                    <div style="text-decoration: line-through; color: #999; font-size: 0.85em;">
+                        De: R$ ${precoTabela.toFixed(2).replace('.', ',')}
+                    </div>
+                    <div style="color: #666; font-size: 0.85em;">Por apenas</div>
                     <div style="color: var(--verde-principal); font-weight: 900; font-size: 1.4em; margin-bottom: 5px;">
-                        R$ ${precoAVista.toFixed(2).replace('.', ',')}
+                        R$ ${precoAVista.toFixed(2).replace('.', ',')} <small style="font-size:0.5em">à vista</small>
                     </div>
                     
                     <div style="color: #444; font-size: 0.9em; font-weight: bold;">
-                        5x de R$ ${valorParcela}
+                        ou 5x de R$ ${valorParcela}
                     </div>
                     <div style="color: #888; font-size: 0.75em; margin-bottom: 15px;">
                         (R$ ${precoParcelado.toFixed(2).replace('.', ',')} no cartão)
