@@ -121,18 +121,29 @@ async function carregarDados() {
             };
         }).filter(p => p !== null && p.estoque > 0);
 
-        // 1. PRIMEIRO: Filtramos para tirar as peças da página inicial
+        // 1. Tira as peças da página inicial
         let apenasMaquinas = produtos.filter(p => !p.categoria.toLowerCase().includes('peça') && !p.categoria.toLowerCase().includes('peca'));
 
-        // 2. Agora sim, jogamos apenas as MÁQUINAS nos grids da tela inicial
+        // 2. DESTAQUES: Produtos com MENOR estoque (se empatar, mistura aleatoriamente)
+        let destaques = [...apenasMaquinas].sort((a, b) => {
+            if (a.estoque === b.estoque) return Math.random() - 0.5;
+            return a.estoque - b.estoque; 
+        });
         let gridDest = document.getElementById('grid-destaques');
-        if(gridDest) gridDest.innerHTML = apenasMaquinas.slice(0, 3).map(p => criarCartao(p)).join('');
+        if(gridDest) gridDest.innerHTML = destaques.slice(0, 3).map(p => criarCartao(p)).join('');
         
+        // 3. LANÇAMENTOS: Os últimos adicionados na planilha
         let lancamentos = apenasMaquinas.slice(-3).reverse();
         let gridLanc = document.getElementById('grid-lancamentos');
         if(gridLanc) gridLanc.innerHTML = lancamentos.length > 0 ? lancamentos.map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhum lançamento recente.</p>";
         
+        // 4. PROMOÇÕES: Maior porcentagem de desconto
         let promocoes = apenasMaquinas.filter(p => p.precoAntigo > p.preco);
+        promocoes.sort((a, b) => {
+            let descA = (a.precoAntigo - a.preco) / a.precoAntigo;
+            let descB = (b.precoAntigo - b.preco) / b.precoAntigo;
+            return descB - descA; // Traz o maior desconto primeiro
+        });
         let gridProm = document.getElementById('grid-promocoes');
         if(gridProm) gridProm.innerHTML = promocoes.length > 0 ? promocoes.slice(0, 3).map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhuma oferta ativa no momento.</p>";
 
