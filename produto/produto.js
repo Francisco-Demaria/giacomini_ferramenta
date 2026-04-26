@@ -9,102 +9,76 @@ function atualizarContador() {
 
 async function carregarProduto() {
     const parametros = new URLSearchParams(window.location.search);
-    const nomeProduto = parametros.get('nome');
-
-    if (!nomeProduto) {
-        document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Produto não encontrado.</p>';
-        return;
-    }
+    const nomeBusca = parametros.get('nome');
+    const container = document.getElementById('detalhes-produto');
 
     try {
         const resposta = await fetch(URL_PLANILHA);
-        const dadosTexto = await resposta.text();
-        const linhas = dadosTexto.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
+        const texto = await resposta.text();
+        // Divide as linhas e remove a primeira (cabeçalho)
+        const linhas = texto.split(/\r?\n/).slice(1);
 
-        let produtos = linhas.map(linha => {
+        let produto = null;
+        for (let linha of linhas) {
             const col = linha.split(',');
-            if (col.length < 4) return null; 
-            
-            return {
-                nome: col[0] ? col[0].trim() : '',
-                categoria: col[1] ? col[1].trim() : '',
-                subcategoria: col[2] ? col[2].trim() : '',
-                preco: parseFloat(col[3]) || 0,
-                precoAntigo: parseFloat(col[4]) || 0,
-                img: col[5] ? col[5].trim() : '',
-                estoque: parseInt(col[6]) || 0,
-                descricao: col[7] ? col[7].trim() : ''
-            };
-        }).filter(p => p !== null);
-
-        const produto = produtos.find(p => p.nome === nomeProduto);
+            // Coluna 0 é o Nome
+            if (col[0] === nomeBusca) { 
+                produto = {
+                    nome: col[0],
+                    categoria: col[1],
+                    subcategoria: col[2],
+                    precoCusto: parseFloat(col[3]), // Coluna 3: Preço Atual (Custo)
+                    precoAntigo: col[4],           // Coluna 4: Preço Antigo
+                    img: col[5],                    // Coluna 5: Imagem
+                    estoque: col[6],                // Coluna 6: Estoque
+                    descricao: col[7]               // Coluna 7: Descrição
+                };
+                break;
+            }
+        }
 
         if (!produto) {
-            document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Produto não encontrado ou sem estoque.</p>';
+            container.innerHTML = "<h2>Produto não encontrado!</h2>";
             return;
         }
 
-        // ============================================
-        // 1. RENDERIZA O PRODUTO PRINCIPAL
-        // ============================================
-        
-        // Verifica se é peça E está sem imagem
-        const ehPeca = produto.categoria.toLowerCase().includes('peça') || produto.categoria.toLowerCase().includes('peca');
-        const semImagem = produto.img === '';
-        
-        let htmlImagem = '';
-        let imgParaCarrinho = IMG_FALHA; // Imagem padrão pro carrinho caso não tenha foto
+        // CÁLCULOS DE PREÇO (Sempre terminando em ,99)
+        let aVista = Math.floor(produto.precoCusto * 1.35) + 0.99;
+        let totalCartao = Math.floor(produto.precoCusto * 1.45) + 0.99;
+        let parcela = (totalCartao / 5).toFixed(2).replace('.', ',');
 
-        // Se NÃO for uma peça sem imagem, monta o bloco da foto normalmente
-        if (!(ehPeca && semImagem)) {
-            let imgProduto = produto.img;
-            if (imgProduto !== '' && !imgProduto.startsWith('http') && !imgProduto.startsWith('img/')) {
-                imgProduto = 'img/' + imgProduto;
-            }
-            if (imgProduto === '') imgProduto = IMG_FALHA;
-            
-            imgParaCarrinho = imgProduto; // Salva a imagem real para mandar pro carrinho
+        // Caminho da imagem
+        let imgFinal = produto.img.startsWith('http') ? produto.img : '../img/' + produto.img;
 
-            htmlImagem = `
-                <div class="imagem-detalhe-container">
-                    <img src="${imgProduto}" alt="${produto.nome}" onerror="this.src='${IMG_FALHA}'">
+        container.innerHTML = `
+            <div class="produto-wrapper" style="display: flex; gap: 40px; flex-wrap: wrap; padding: 20px;">
+                <div class="produto-imagem" style="flex: 1; min-width: 300px;">
+                    <img src="${imgFinal}" style="width: 100%; border-radius: 8px;" onerror="this.src='../padrao.png'">
                 </div>
-            `;
-        }
-
-               // Dentro do produto.js, na hora de mostrar o preço:
-        let custo = produto.preco;
-        let aVista = Math.floor(custo * 1.35) + 0.99;
-        let parcelado = Math.floor(custo * 1.45) + 0.99;
-        let parcela = (parcelado / 5).toFixed(2).replace('.', ',');
-
-// No seu innerHTML, use:
-// <h2 class="preco-atual">R$ ${aVista.toFixed(2).replace('.', ',')} <small style="font-size: 0.5em; color: #666;">à vista</small></h2>
-// <p style="font-size: 1.1em; color: #444;">Ou 5x de <strong>R$ ${parcela}</strong> sem juros</p>
-        // Injeta na tela (se a imagem não existir, a info estica 100%)
-        document.getElementById('detalhes-produto').innerHTML = `
-            <div class="layout-detalhe-produto">
-                ${htmlImagem}
-                <div class="info-detalhe-container">
-                    <h2>${produto.nome}</h2>
-                    <p class="info-detalhe-categoria"><strong>Categoria:</strong> ${produto.categoria}${txtSubcategoria}</p>
-                    ${htmlPrecoAntigo}
-                    <div class="info-detalhe-preco-atual">R$ ${produto.preco.toFixed(2).replace('.', ',')}</div>
-                    <p class="info-detalhe-descricao">${produto.descricao}</p>
-                    <p class="info-detalhe-estoque" style="color: ${produto.estoque > 0 ? 'green' : 'red'};"><strong>Estoque:</strong> ${produto.estoque} unidades</p>
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('${produto.nome}', ${produto.preco}, '${imgParaCarrinho}')">Adicionar ao Carrinho</button>
+                <div class="produto-info" style="flex: 1; min-width: 300px;">
+                    <span style="background: #eee; padding: 4px 10px; border-radius: 4px; font-size: 0.8em;">${produto.categoria} ${produto.subcategoria ? '> ' + produto.subcategoria : ''}</span>
+                    <h1 style="margin: 15px 0;">${produto.nome}</h1>
+                    <p style="color: #666; margin-bottom: 20px;">${produto.descricao}</p>
+                    
+                    <div class="card-preco" style="background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+                        <div style="color: var(--verde-principal); font-size: 2.2em; font-weight: 900;">
+                            R$ ${aVista.toFixed(2).replace('.', ',')}
+                            <small style="font-size: 0.4em; color: #666; display: block;">À VISTA NO PIX OU BOLETO</small>
+                        </div>
+                        <div style="margin-top: 15px; font-size: 1.2em; color: #444;">
+                            Ou <strong>5x de R$ ${parcela}</strong> no cartão
+                            <small style="display: block; font-size: 0.7em; color: #888;">Total parcelado: R$ ${totalCartao.toFixed(2).replace('.', ',')}</small>
+                        </div>
+                        <button onclick="adicionarAoCarrinho('${produto.nome}', ${aVista}, '${imgFinal}')" 
+                                style="width: 100%; background: var(--verde-principal); color: white; border: none; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 1.2em; margin-top: 20px; cursor: pointer;">
+                            <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
-
-        // ============================================
-        // 2. RENDERIZA OS RECOMENDADOS
-        // ============================================
-        carregarRecomendados(produtos, produto);
-
-    } catch (erro) {
-        console.error("Erro ao carregar o produto:", erro);
-        document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Erro ao carregar os detalhes do produto.</p>';
+    } catch (e) {
+        container.innerHTML = "<h2>Erro ao carregar dados.</h2>";
     }
 }
 
