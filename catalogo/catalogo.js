@@ -1,4 +1,5 @@
 const URL_PLANILHA = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjwdcNetNoRZzXi20wyCVlMwhQf86ckoI8ZcIDui7wnvQpxUg7NIAio6HEu_CMHqyG1yT4Rcee_q6H/pub?output=csv';
+let todosOsProdutosDaPlanilha = [];
 
 function atualizarContador() {
     let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
@@ -68,6 +69,8 @@ async function carregarCatalogo() {
             };
         }).filter(p => p !== null && p.estoque > 0);
 
+        todosOsProdutosDaPlanilha = [...produtos];
+        
         // --- INÍCIO DA LÓGICA DE BUSCA ---
         // Verifica se existe o parâmetro "?busca=" na URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -150,3 +153,48 @@ function abrirSubcategoria(id) {
 }
 
 window.onload = () => { carregarCatalogo(); atualizarContador(); };
+
+window.aplicarSuperFiltro = function() {
+    if (todosOsProdutosDaPlanilha.length === 0) return;
+
+    // 1. Pega os produtos originais
+    let filtrados = [...todosOsProdutosDaPlanilha];
+
+    // 2. Pega os valores selecionados pelo usuário
+    const ordem = document.getElementById('filtro-ordem').value;
+    const cat = document.querySelector('input[name="cat"]:checked').value;
+    const bat = document.querySelector('input[name="bat"]:checked').value;
+
+    // 3. Filtro de Categoria
+    if (cat !== 'todas') {
+        filtrados = filtrados.filter(p => p.categoria.toLowerCase().includes(cat));
+    }
+
+    // 4. Filtro de Bateria (Busca se tem '18v', '40v' no nome ou na descrição)
+    if (bat !== 'todas') {
+        filtrados = filtrados.filter(p => 
+            p.nome.toLowerCase().includes(bat) || 
+            p.descricao.toLowerCase().includes(bat)
+        );
+    }
+
+    // 5. Filtro de Preço (Ordenação)
+    if (ordem === 'menor-preco') {
+        filtrados.sort((a, b) => a.preco - b.preco);
+    } else if (ordem === 'maior-preco') {
+        filtrados.sort((a, b) => b.preco - a.preco);
+    }
+
+    // 6. Atualiza a tela do catálogo
+    const container = document.getElementById('lista-maquinas');
+    
+    // Esconde a área de peças sanfonadas para não dar conflito, já que o filtro busca tudo
+    document.getElementById('sessao-pecas').style.display = 'none';
+    document.getElementById('sessao-maquinas').style.display = 'block';
+
+    if (container) {
+        container.innerHTML = filtrados.length > 0 
+            ? filtrados.map(p => criarCartao(p)).join('') 
+            : '<p style="padding: 40px; text-align: center; width: 100%; color: #666;">Nenhum produto encontrado com estes filtros.</p>';
+    }
+};
