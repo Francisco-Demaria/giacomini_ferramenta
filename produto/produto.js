@@ -9,79 +9,119 @@ function atualizarContador() {
 
 async function carregarProduto() {
     const parametros = new URLSearchParams(window.location.search);
-    const nomeBusca = parametros.get('nome');
-    const container = document.getElementById('detalhes-produto');
+    const nomeProduto = parametros.get('nome');
+
+    if (!nomeProduto) {
+        document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Produto não encontrado.</p>';
+        return;
+    }
 
     try {
         const resposta = await fetch(URL_PLANILHA);
-        const texto = await resposta.text();
-        // Divide as linhas e remove a primeira (cabeçalho)
-        const linhas = texto.split(/\r?\n/).slice(1);
+        const dadosTexto = await resposta.text();
+        const linhas = dadosTexto.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
 
-        let produto = null;
-        for (let linha of linhas) {
+        let produtos = linhas.map(linha => {
             const col = linha.split(',');
-            // Coluna 0 é o Nome
-            if (col[0] === nomeBusca) { 
-                produto = {
-                    nome: col[0],
-                    categoria: col[1],
-                    subcategoria: col[2],
-                    precoCusto: parseFloat(col[3]), // Coluna 3: Preço Atual (Custo)
-                    precoAntigo: col[4],           // Coluna 4: Preço Antigo
-                    img: col[5],                    // Coluna 5: Imagem
-                    estoque: col[6],                // Coluna 6: Estoque
-                    descricao: col[7]               // Coluna 7: Descrição
-                };
-                break;
-            }
-        }
+            if (col.length < 4) return null; 
+            
+            return {
+                nome: col[0] ? col[0].trim() : '',
+                categoria: col[1] ? col[1].trim() : '',
+                subcategoria: col[2] ? col[2].trim() : '',
+                precoCusto: parseFloat(col[3]) || 0, // Coluna 3: Preço que você compra
+                precoAntigoPlanilha: col[4] ? col[4].trim() : '', // Mantido na memória, mas ignorado no cálculo
+                img: col[5] ? col[5].trim() : '',
+                estoque: parseInt(col[6]) || 0,
+                descricao: col[7] ? col[7].trim() : ''
+            };
+        }).filter(p => p !== null);
+
+        const produto = produtos.find(p => p.nome === nomeProduto);
 
         if (!produto) {
-            container.innerHTML = "<h2>Produto não encontrado!</h2>";
+            document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Produto não encontrado.</p>';
             return;
         }
 
-        // CÁLCULOS DE PREÇO (Sempre terminando em ,99)
-        let aVista = Math.floor(produto.precoCusto * 1.35) + 0.99;
-        let totalCartao = Math.floor(produto.precoCusto * 1.45) + 0.99;
-        let parcela = (totalCartao / 5).toFixed(2).replace('.', ',');
+        // ============================================
+        // 1. CÁLCULOS DE PREÇO (LÓGICA NOVA)
+        // ============================================
+        let precoTabela = Math.floor(produto.precoCusto * 1.65) + 0.99; // Preço para o "DE:"
+        let precoAVista = Math.floor(produto.precoCusto * 1.35) + 0.99; // Preço "POR:"
+        let precoParcelado = Math.floor(produto.precoCusto * 1.45) + 0.99;
+        let valorParcela = (precoParcelado / 5).toFixed(2).replace('.', ',');
 
-        // Caminho da imagem
-        let imgFinal = produto.img.startsWith('http') ? produto.img : '../img/' + produto.img;
+        // ============================================
+        // 2. LÓGICA DE IMAGEM (MANTIDA A SUA)
+        // ============================================
+        const ehPeca = produto.categoria.toLowerCase().includes('peça') || produto.categoria.toLowerCase().includes('peca');
+        const semImagem = produto.img === '';
+        
+        let htmlImagem = '';
+        let imgParaCarrinho = IMG_FALHA;
 
-        container.innerHTML = `
-            <div class="produto-wrapper" style="display: flex; gap: 40px; flex-wrap: wrap; padding: 20px;">
-                <div class="produto-imagem" style="flex: 1; min-width: 300px;">
-                    <img src="${imgFinal}" style="width: 100%; border-radius: 8px;" onerror="this.src='../padrao.png'">
+        if (!(ehPeca && semImagem)) {
+            let imgProduto = produto.img;
+            if (imgProduto !== '' && !imgProduto.startsWith('http') && !imgProduto.startsWith('../img/')) {
+                imgProduto = '../img/' + imgProduto; // Ajustado para ../ pois produto.html costuma estar em pasta
+            }
+            if (imgProduto === '') imgProduto = IMG_FALHA;
+            
+            imgParaCarrinho = imgProduto;
+
+            htmlImagem = `
+                <div class="imagem-detalhe-container" style="flex: 1; min-width: 300px;">
+                    <img src="${imgProduto}" alt="${produto.nome}" onerror="this.src='${IMG_FALHA}'" style="width: 100%; border-radius: 8px;">
                 </div>
-                <div class="produto-info" style="flex: 1; min-width: 300px;">
-                    <span style="background: #eee; padding: 4px 10px; border-radius: 4px; font-size: 0.8em;">${produto.categoria} ${produto.subcategoria ? '> ' + produto.subcategoria : ''}</span>
-                    <h1 style="margin: 15px 0;">${produto.nome}</h1>
-                    <p style="color: #666; margin-bottom: 20px;">${produto.descricao}</p>
+            `;
+        }
+
+        let txtSubcategoria = produto.subcategoria ? ` > ${produto.subcategoria}` : '';
+
+        // ============================================
+        // 3. RENDERIZAÇÃO DO HTML (COM PREÇOS NOVOS)
+        // ============================================
+        document.getElementById('detalhes-produto').innerHTML = `
+            <div class="layout-detalhe-produto" style="display: flex; gap: 30px; flex-wrap: wrap; padding: 20px;">
+                ${htmlImagem}
+                <div class="info-detalhe-container" style="flex: 1; min-width: 300px;">
+                    <span style="background: #eee; padding: 4px 10px; border-radius: 4px; font-size: 0.8em; text-transform: uppercase;">${produto.categoria}${txtSubcategoria}</span>
+                    <h2 style="margin-top: 15px; font-size: 2em;">${produto.nome}</h2>
                     
-                    <div class="card-preco" style="background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
-                        <div style="color: var(--verde-principal); font-size: 2.2em; font-weight: 900;">
-                            R$ ${aVista.toFixed(2).replace('.', ',')}
-                            <small style="font-size: 0.4em; color: #666; display: block;">À VISTA NO PIX OU BOLETO</small>
+                    <div class="bloco-precos" style="margin: 20px 0; padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 10px;">
+                        <p style="text-decoration: line-through; color: #999; margin-bottom: 5px;">De: R$ ${precoTabela.toFixed(2).replace('.', ',')}</p>
+                        <p style="color: #666; font-size: 0.9em; margin-bottom: 5px;">Por apenas:</p>
+                        <div style="color: var(--verde-principal); font-size: 2.5em; font-weight: 900; line-height: 1;">
+                            R$ ${precoAVista.toFixed(2).replace('.', ',')}
+                            <small style="font-size: 0.4em; color: #666; display: block; font-weight: normal; margin-top: 5px;">À VISTA NO PIX OU BOLETO</small>
                         </div>
-                        <div style="margin-top: 15px; font-size: 1.2em; color: #444;">
-                            Ou <strong>5x de R$ ${parcela}</strong> no cartão
-                            <small style="display: block; font-size: 0.7em; color: #888;">Total parcelado: R$ ${totalCartao.toFixed(2).replace('.', ',')}</small>
+                        
+                        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dotted #ccc;">
+                            <p style="font-size: 1.2em; color: #444;">Ou <strong>5x de R$ ${valorParcela}</strong> no cartão</p>
+                            <small style="color: #888;">(Total parcelado: R$ ${precoParcelado.toFixed(2).replace('.', ',')})</small>
                         </div>
-                        <button onclick="adicionarAoCarrinho('${produto.nome}', ${aVista}, '${imgFinal}')" 
-                                style="width: 100%; background: var(--verde-principal); color: white; border: none; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 1.2em; margin-top: 20px; cursor: pointer;">
-                            <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-                        </button>
                     </div>
+
+                    <p class="info-detalhe-descricao" style="line-height: 1.6; color: #555; margin-bottom: 20px;">${produto.descricao}</p>
+                    
+                    <button class="btn-adicionar-carrinho" 
+                            onclick="adicionarAoCarrinho('${produto.nome}', ${precoAVista}, '${imgParaCarrinho}')"
+                            style="width: 100%; padding: 18px; background: var(--verde-principal); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1.2em; cursor: pointer;">
+                        <i class="fas fa-shopping-cart"></i> ADICIONAR AO CARRINHO
+                    </button>
                 </div>
             </div>
         `;
-    } catch (e) {
-        container.innerHTML = "<h2>Erro ao carregar dados.</h2>";
+
+        // Carrega os recomendados passando a lista e o produto atual
+        carregarRecomendados(produtos, produto);
+
+    } catch (erro) {
+        console.error("Erro ao carregar o produto:", erro);
+        document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Erro ao carregar os detalhes do produto.</p>';
     }
 }
-
 function carregarRecomendados(todosProdutos, produtoAtual) {
     const container = document.getElementById('grid-recomendados');
     if (!container) return;
