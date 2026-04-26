@@ -121,14 +121,18 @@ async function carregarDados() {
             };
         }).filter(p => p !== null && p.estoque > 0);
 
+        // 1. PRIMEIRO: Filtramos para tirar as peças da página inicial
+        let apenasMaquinas = produtos.filter(p => !p.categoria.toLowerCase().includes('peça') && !p.categoria.toLowerCase().includes('peca'));
+
+        // 2. Agora sim, jogamos apenas as MÁQUINAS nos grids da tela inicial
         let gridDest = document.getElementById('grid-destaques');
-        if(gridDest) gridDest.innerHTML = produtos.slice(0, 3).map(p => criarCartao(p)).join('');
+        if(gridDest) gridDest.innerHTML = apenasMaquinas.slice(0, 3).map(p => criarCartao(p)).join('');
         
-        let lancamentos = produtos.slice(-3).reverse();
+        let lancamentos = apenasMaquinas.slice(-3).reverse();
         let gridLanc = document.getElementById('grid-lancamentos');
         if(gridLanc) gridLanc.innerHTML = lancamentos.length > 0 ? lancamentos.map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhum lançamento recente.</p>";
         
-        let promocoes = produtos.filter(p => p.precoAntigo > p.preco);
+        let promocoes = apenasMaquinas.filter(p => p.precoAntigo > p.preco);
         let gridProm = document.getElementById('grid-promocoes');
         if(gridProm) gridProm.innerHTML = promocoes.length > 0 ? promocoes.slice(0, 3).map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhuma oferta ativa no momento.</p>";
 
