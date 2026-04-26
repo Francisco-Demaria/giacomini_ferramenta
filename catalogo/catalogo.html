@@ -33,12 +33,34 @@
         </div>
 
         <div class="layout-catalogo">
-            <aside class="menu-lateral-filtros">
-                <h3>Categorias</h3>
-                <ul class="lista-filtros">
-                    <li><button onclick="mudarCatalogo('maquinas')" id="btn-maquinas" class="btn-filtro ativo">Máquinas e Ferramentas</button></li>
-                    <li><button onclick="mudarCatalogo('pecas')" id="btn-pecas" class="btn-filtro">Peças de Reposição</button></li>
-                </ul>
+           <aside class="menu-lateral-filtros">
+                <h3 style="margin-bottom: 15px; font-size: 1.2em; border-bottom: 2px solid #eee; padding-bottom: 10px;">Filtros</h3>
+
+                <div class="grupo-filtro">
+                    <h4>Ordenar por</h4>
+                    <select id="filtro-ordem" onchange="aplicarSuperFiltro()">
+                        <option value="relevantes">Mais Relevantes</option>
+                        <option value="menor-preco">Menor Preço</option>
+                        <option value="maior-preco">Maior Preço</option>
+                    </select>
+                </div>
+
+                <div class="grupo-filtro">
+                    <h4>Categorias</h4>
+                    <label><input type="radio" name="cat" value="todas" checked onchange="aplicarSuperFiltro()"> Todas</label>
+                    <label><input type="radio" name="cat" value="maquina" onchange="aplicarSuperFiltro()"> Máquinas</label>
+                    <label><input type="radio" name="cat" value="peca" onchange="aplicarSuperFiltro()"> Peças</label>
+                    <label><input type="radio" name="cat" value="outdoor" onchange="aplicarSuperFiltro()"> Linha Outdoor</label>
+                </div>
+
+                <div class="grupo-filtro">
+                    <h4>Voltagem (Bateria)</h4>
+                    <label><input type="radio" name="bat" value="todas" checked onchange="aplicarSuperFiltro()"> Todas</label>
+                    <label><input type="radio" name="bat" value="40v" onchange="aplicarSuperFiltro()"> 40V</label>
+                    <label><input type="radio" name="bat" value="18v" onchange="aplicarSuperFiltro()"> 18V</label>
+                    <label><input type="radio" name="bat" value="12v" onchange="aplicarSuperFiltro()"> 12V</label>
+                    <label><input type="radio" name="bat" value="7.2v" onchange="aplicarSuperFiltro()"> 7.2V</label>
+                </div>
             </aside>
 
             <section class="conteudo-principal">
