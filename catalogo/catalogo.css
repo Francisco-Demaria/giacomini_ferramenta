@@ -1,0 +1,109 @@
+:root { 
+    --verde-principal: #166e36; 
+    --verde-escuro: #0e4722; 
+    --verde-destaque: #1ebe5d; 
+    --grafite: #333333; 
+    --fundo: #f4f7f6; 
+    --branco: #FFFFFF; 
+    --texto: #444; 
+    --borda: #e5e5e5; 
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+body { background-color: var(--fundo); color: var(--texto); overflow-x: hidden; }
+
+header { background: var(--verde-principal); padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000;}
+.logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; margin: 0 auto;}
+.logo-img { height: 45px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.7); background: white; padding: 2px; }
+.logo-texto { color: var(--branco); font-size: 1.5em; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+
+.icone-carrinho-topo { color: var(--branco); text-decoration: none; font-size: 1.4em; position: absolute; right: 5%; transition: 0.3s;}
+.icone-carrinho-topo:hover { color: var(--verde-destaque); transform: scale(1.1); }
+.badge-carrinho { position: absolute; top: -10px; right: -12px; background: #e74c3c; color: white; border-radius: 50%; padding: 3px 7px; font-size: 0.7em; font-weight: bold; border: 2px solid var(--verde-principal);}
+
+.secao { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.topo-catalogo { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;}
+.titulo-secao { font-size: 2.2em; color: var(--verde-principal); text-transform: uppercase; font-weight: 900; margin: 0 auto;}
+
+.cartao-produto { background: white; border: 1px solid var(--borda); padding: 25px; border-radius: 8px; text-align: center; transition: 0.3s; position: relative; display: flex; flex-direction: column; height: 100%; justify-content: space-between;}
+.cartao-produto:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--verde-principal); transform: translateY(-5px);}
+.selo-desconto { position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; padding: 6px 12px; font-size: 0.85em; font-weight: 900; border-radius: 3px; letter-spacing: 1px;}
+.cartao-produto img { height: 180px; width: 100%; object-fit: contain; margin-bottom: 15px; }
+.cartao-produto h3 { flex-grow: 1; display: flex; align-items: flex-start; justify-content: center; min-height: 48px; font-size: 1.1em; margin-bottom: 10px; color: var(--grafite); line-height: 1.4; font-weight: bold;}
+.preco-antigo { text-decoration: line-through; color: #999; font-size: 0.9em; min-height: 1.2em;}
+.preco-atual { color: var(--verde-principal); font-size: 2em; font-weight: 900; margin-bottom: 15px; margin-top: auto;}
+.btn-comprar { margin-top: auto; background: var(--verde-principal); color: white; text-decoration: none; padding: 15px; font-weight: bold; text-transform: uppercase; border-radius: 4px; display: block; width: 100%; border: none; cursor: pointer; transition: 0.3s;}
+.btn-comprar:hover { background: var(--verde-destaque); }
+
+/* BARRA DE PESQUISA */
+.faixa-pesquisa { background: var(--verde-escuro); padding: 15px 5%; display: flex; justify-content: center; border-bottom: 2px solid #0a3518; margin-bottom: 30px;}
+.box-pesquisa { display: flex; width: 100%; max-width: 700px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border-radius: 25px;}
+.box-pesquisa input { flex: 1; padding: 14px 20px; border: none; border-radius: 25px 0 0 25px; outline: none; font-size: 1.05em; }
+.box-pesquisa button { background: var(--verde-destaque); color: white; border: none; padding: 0 30px; border-radius: 0 25px 25px 0; cursor: pointer; font-size: 1.2em; transition: 0.3s;}
+.box-pesquisa button:hover { background: #159f4d; }
+
+/* ESTILO DA LISTA DE PEÇAS E SANFONA */
+.secao-titulo { text-align: center; color: var(--verde-escuro); margin: 40px 0 20px; font-size: 2em; width: 100%; }
+.lista-pecas { max-width: 800px; margin: 0 auto 50px auto; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.peca-item { background: white; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.peca-cabecalho { background: #f8f9fa; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.1em; transition: 0.3s; }
+.peca-cabecalho:hover { background: #e9ecef; }
+.peca-conteudo { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; background: white; }
+.peca-conteudo.ativo { padding: 20px; max-height: 500px; border-top: 1px solid #eee; }
+.peca-info { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+.seta { transition: transform 0.3s; }
+.peca-cabecalho.aberto .seta { transform: rotate(180deg); }
+
+/* --- BOTÃO VOLTAR --- */
+.btn-voltar { display: inline-block; margin: 20px 0; padding: 10px 20px; background: var(--verde-escuro, #333); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s; }
+.btn-voltar:hover { opacity: 0.8; }
+
+/* --- SIMETRIA DOS CARTÕES --- */
+.grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px 0; }
+
+/* --- ESTILO DOS GRUPOS DE PEÇAS --- */
+.grupo-pecas { max-width: 800px; margin: 0 auto 30px auto; width: 100%; }
+.titulo-grupo { color: var(--verde-escuro, #333); border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-bottom: 15px; text-align: left; }
+
+/* --- ESTILO DA SANFONA DE SUBCATEGORIAS --- */
+.sanfona-subcategoria { background: #f0f4f8; border: 1px solid #cce0f5; padding: 15px 20px; cursor: pointer; font-weight: bold; font-size: 1.2em; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; color: var(--verde-escuro); transition: 0.3s; }
+.sanfona-subcategoria:hover { background: #e2ecf5; }
+.conteudo-subcategoria { display: none; padding: 10px 15px; margin-bottom: 20px; border-left: 3px solid var(--verde-destaque); }
+.conteudo-subcategoria.ativo { display: flex; flex-direction: column; gap: 12px; }
+.item-peca-simples { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+
+/* --- ESTILO DAS ABAS DE SEPARAÇÃO --- */
+.container-abas { display: flex; justify-content: center; gap: 15px; margin: 30px 0; flex-wrap: wrap; }
+.btn-aba { padding: 15px 40px; font-size: 1.2em; font-weight: bold; border: 2px solid var(--verde-escuro); border-radius: 8px; cursor: pointer; background: white; color: var(--verde-escuro); transition: 0.3s; }
+.btn-aba.ativo { background: var(--verde-escuro); color: white; }
+.btn-aba:hover { background: var(--verde-escuro); color: white; opacity: 0.9; }
+
+/* --- LAYOUT ESTILO MERCADO LIVRE --- */
+.layout-catalogo { display: flex; max-width: 1200px; margin: 20px auto; padding: 0 20px; gap: 30px; align-items: flex-start; }
+.menu-lateral-filtros { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.menu-lateral-filtros h3 { margin-top: 0; color: var(--verde-escuro); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+.lista-filtros { list-style: none; padding: 0; margin: 0; }
+.lista-filtros li { margin-bottom: 10px; }
+.btn-filtro { width: 100%; text-align: left; padding: 12px 15px; border: none; background: transparent; cursor: pointer; font-size: 1.1em; color: #555; border-radius: 5px; transition: 0.3s; }
+.btn-filtro:hover { background: #f0f4f8; color: var(--verde-escuro); }
+.btn-filtro.ativo { background: var(--verde-escuro); color: white; font-weight: bold; }
+.conteudo-principal { flex-grow: 1; width: 100%; }
+
+/* Responsividade: No celular a barra lateral vira botões no topo */
+@media (max-width: 768px) {
+    .layout-catalogo { flex-direction: column; }
+    .menu-lateral-filtros { width: 100%; }
+    .lista-filtros { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
+    .btn-filtro { white-space: nowrap; text-align: center; }
+    .item-peca-simples { flex-direction: column; align-items: flex-start; gap: 10px; } 
+    .item-peca-simples > div { width: 100%; } 
+    .item-peca-simples .direita { text-align: left !important; }
+}
+
+#lista-maquinas {
+    display: grid;
+    /* Reduzimos o mínimo de 250px para 200px. Assim ele tem espaço para "respirar" em telas pequenas antes de quebrar a linha */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    padding: 20px 0;
+}
