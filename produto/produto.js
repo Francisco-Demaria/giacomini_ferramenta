@@ -192,4 +192,8 @@ function adicionarAoCarrinho(nome, preco, img) {
     alert(`${nome} adicionado ao carrinho!`);
 }
 
+function abrirMenu() { document.getElementById('menu-lateral').classList.add('aberto'); document.getElementById('overlay').style.display = 'block'; }
+function fecharMenu() { document.getElementById('menu-lateral').classList.remove('aberto'); document.getElementById('overlay').style.display = 'none'; }
+
+
 window.onload = () => { carregarProduto(); atualizarContador(); };
