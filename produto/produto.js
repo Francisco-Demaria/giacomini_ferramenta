@@ -122,6 +122,7 @@ async function carregarProduto() {
         document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Erro ao carregar os detalhes do produto.</p>';
     }
 }
+
 function carregarRecomendados(todosProdutos, produtoAtual) {
     const container = document.getElementById('grid-recomendados');
     if (!container) return;
