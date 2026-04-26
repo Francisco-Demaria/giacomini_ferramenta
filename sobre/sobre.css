@@ -19,6 +19,19 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
 .icone-carrinho-topo:hover { color: var(--verde-destaque); transform: scale(1.1); }
 .badge-carrinho { position: absolute; top: -10px; right: -12px; background: #e74c3c; color: white; border-radius: 50%; padding: 3px 7px; font-size: 0.7em; font-weight: bold; border: 2px solid var(--verde-principal);}
 
+/*Menu*/
+/* MENU LATERAL */
+.gaveta { position: fixed; top: 0; height: 100vh; width: 320px; background: var(--branco); box-shadow: 5px 0 25px rgba(0,0,0,0.2); z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px 20px; display: flex; flex-direction: column; left: -340px;}
+.gaveta.aberto { left: 0; }
+.gaveta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--fundo); padding-bottom: 15px;}
+.gaveta-header h2 { color: var(--verde-principal); font-weight: 800; text-transform: uppercase; }
+.btn-fechar-menu { background: var(--fundo); color: var(--grafite); border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px; font-weight: bold; transition: 0.3s;}
+.btn-fechar-menu:hover { background: #e74c3c; color: white; }
+.menu-links { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.menu-links a { text-decoration: none; color: var(--grafite); font-size: 1em; padding: 15px; border-radius: 4px; display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s;}
+.menu-links a:hover { background: #e8f5e9; color: var(--verde-principal); border-left: 4px solid var(--verde-principal);}
+#overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 1500; }
+
 
 .banner-sobre { background: linear-gradient(rgba(14,71,34,0.9), rgba(22,110,54,0.9)), url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDM5MTUiIGZpbGwtb3BhY2l0eT0iMC4yMiI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTIwIDIwaDIwdjIwSDIWMjB6TTAgMjBoMjB2MjBIMFYyMHoyMCAwaDIwdjIwSDIwVjB6Ii8+PC9nPjwvZz48L3N2Zz4='); padding: 80px 20px; text-align: center; color: white; border-bottom: 5px solid var(--verde-principal);}
 .banner-sobre h1 { font-size: 3.5em; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);}
