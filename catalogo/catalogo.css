@@ -107,3 +107,12 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
     width: 100%;
     padding: 20px 0;
 }
+
+/* Estilos do Filtro (Mercado Livre Style) */
+.grupo-filtro { margin-bottom: 25px; }
+.grupo-filtro h4 { font-size: 0.95em; color: #333; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; }
+.grupo-filtro label { display: flex; align-items: center; margin-bottom: 8px; font-size: 0.95em; color: #555; cursor: pointer; transition: 0.2s; }
+.grupo-filtro label:hover { color: var(--verde-principal); }
+.grupo-filtro input[type="radio"] { margin-right: 10px; cursor: pointer; accent-color: var(--verde-principal); width: 16px; height: 16px; }
+.grupo-filtro select { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.95em; color: #333; outline: none; cursor: pointer; }
+.grupo-filtro select:focus { border-color: var(--verde-principal); }
