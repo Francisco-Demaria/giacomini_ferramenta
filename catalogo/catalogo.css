@@ -116,3 +116,8 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
 .grupo-filtro input[type="radio"] { margin-right: 10px; cursor: pointer; accent-color: var(--verde-principal); width: 16px; height: 16px; }
 .grupo-filtro select { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.95em; color: #333; outline: none; cursor: pointer; }
 .grupo-filtro select:focus { border-color: var(--verde-principal); }
+
+.btn-zap-flutuante { position: fixed; bottom: 30px; right: 30px; background: #25D366; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4); z-index: 999; transition: 0.3s; text-decoration: none;}
+.btn-zap-flutuante:hover { transform: scale(1.1); background: #1ebe5d; }
+.btn-zap-flutuante i { color: white; font-size: 2.2em; }
+
