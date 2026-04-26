@@ -41,7 +41,7 @@ function criarCartao(p) {
                 <h3>${p.nome}</h3>
                 
                 <div class="precos-container" style="margin-top: auto; text-align: center;">
-                    <div style="color: #666; font-size: 0.85em;">À vista no Pix ou Boleto</div>
+                    <div style="color: #666; font-size: 0.85em;">À vista</div>
                     <div style="color: var(--verde-principal); font-weight: 900; font-size: 1.4em; margin-bottom: 5px;">
                         R$ ${precoAVista.toFixed(2).replace('.', ',')}
                     </div>
