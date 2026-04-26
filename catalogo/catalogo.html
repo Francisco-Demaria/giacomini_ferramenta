@@ -10,6 +10,9 @@
 <body>
 
     <header>
+        <button class="btn-menu" onclick="abrirMenu()">
+            <i class="fas fa-bars" style="font-size: 1.5em;"></i> Menu
+        </button>
 
         <a href="../index.html" class="logo-container">
             <img src="../images.jfif" alt="Giacomini" class="logo-img" onerror="this.src='../padrao.png'">
@@ -28,6 +31,20 @@
             <button onclick="fazerBusca()"><i class="fas fa-search"></i></button>
         </div>
     </div>
+
+    <nav id="menu-lateral" class="gaveta">
+        <div class="gaveta-header">
+            <h2>Navegação</h2>
+            <button class="btn-fechar-menu" onclick="fecharMenu()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="menu-links">
+            <a href="../index.html"><i class="fas fa-home"></i> Início</a>
+            <a href="../sobre/sobre.html"><i class="fas fa-industry"></i> Quem Somos</a>
+            <a href="../catalogo/catalogo.html"><i class="fas fa-tools"></i> Catálogo Completo</a>
+            <a href="../carrinho/carrinho.html"><i class="fas fa-shopping-cart"></i> Meu Carrinho</a>
+            <a href="https://wa.me/5547989050263" target="_blank"><i class="fab fa-whatsapp"></i> Assistência Técnica</a>
+        </div>
+    </nav>
 
 
     <main>
