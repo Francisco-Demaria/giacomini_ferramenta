@@ -72,10 +72,15 @@ async function carregarProduto() {
             `;
         }
 
-        let temDesconto = produto.precoAntigo > produto.preco;
-        let htmlPrecoAntigo = temDesconto ? `<p class="info-detalhe-preco-antigo">De: R$ ${produto.precoAntigo.toFixed(2).replace('.', ',')}</p>` : '';
-        let txtSubcategoria = produto.subcategoria ? ` > ${produto.subcategoria}` : '';
+               // Dentro do produto.js, na hora de mostrar o preço:
+        let custo = produto.preco;
+        let aVista = Math.floor(custo * 1.35) + 0.99;
+        let parcelado = Math.floor(custo * 1.45) + 0.99;
+        let parcela = (parcelado / 5).toFixed(2).replace('.', ',');
 
+// No seu innerHTML, use:
+// <h2 class="preco-atual">R$ ${aVista.toFixed(2).replace('.', ',')} <small style="font-size: 0.5em; color: #666;">à vista</small></h2>
+// <p style="font-size: 1.1em; color: #444;">Ou 5x de <strong>R$ ${parcela}</strong> sem juros</p>
         // Injeta na tela (se a imagem não existir, a info estica 100%)
         document.getElementById('detalhes-produto').innerHTML = `
             <div class="layout-detalhe-produto">
