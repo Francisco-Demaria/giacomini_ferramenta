@@ -191,7 +191,14 @@ window.aplicarSuperFiltro = function() {
     }
 
     // 3. Filtro de Preço (Mín e Máx)
-    filtrados = filtrados.filter(p => p.preco >= precoMin && p.preco <= precoMax);
+// 3. Filtro de Preço (Mín e Máx) baseado no PREÇO DE VENDA
+    filtrados = filtrados.filter(p => {
+        // Calcula o preço final que o cliente realmente vê na tela
+        let precoVenda = Math.floor(p.preco * 1.35) + 0.99;
+        
+        // Compara se o preço de venda está dentro do que o cliente digitou
+        return precoVenda >= precoMin && precoVenda <= precoMax;
+    });
 
     // 4. Ordenação
     if (ordem === 'menor-preco') filtrados.sort((a, b) => a.preco - b.preco);
