@@ -157,44 +157,96 @@ window.onload = () => { carregarCatalogo(); atualizarContador(); };
 window.aplicarSuperFiltro = function() {
     if (todosOsProdutosDaPlanilha.length === 0) return;
 
-    // 1. Pega os produtos originais
     let filtrados = [...todosOsProdutosDaPlanilha];
 
-    // 2. Pega os valores selecionados pelo usuário
     const ordem = document.getElementById('filtro-ordem').value;
     const cat = document.querySelector('input[name="cat"]:checked').value;
     const bat = document.querySelector('input[name="bat"]:checked').value;
+    const precoMin = parseFloat(document.getElementById('preco-min').value) || 0;
+    const precoMax = parseFloat(document.getElementById('preco-max').value) || Infinity;
 
-    // 3. Filtro de Categoria
+    // 1. Filtro de Categoria (aceita acentos ou sem acentos)
     if (cat !== 'todas') {
-        filtrados = filtrados.filter(p => p.categoria.toLowerCase().includes(cat));
+        filtrados = filtrados.filter(p => p.categoria.toLowerCase().includes(cat) || 
+                                          (cat === 'peca' && p.categoria.toLowerCase().includes('peça')) ||
+                                          (cat === 'acessorio' && p.categoria.toLowerCase().includes('acessório')));
     }
 
-    // 4. Filtro de Bateria (Busca se tem '18v', '40v' no nome ou na descrição)
+    // 2. Filtro de Bateria
     if (bat !== 'todas') {
-        filtrados = filtrados.filter(p => 
-            p.nome.toLowerCase().includes(bat) || 
-            p.descricao.toLowerCase().includes(bat)
-        );
+        filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(bat) || p.descricao.toLowerCase().includes(bat));
     }
 
-    // 5. Filtro de Preço (Ordenação)
-    if (ordem === 'menor-preco') {
-        filtrados.sort((a, b) => a.preco - b.preco);
-    } else if (ordem === 'maior-preco') {
-        filtrados.sort((a, b) => b.preco - a.preco);
-    }
+    // 3. Filtro de Preço (Mín e Máx)
+    filtrados = filtrados.filter(p => p.preco >= precoMin && p.preco <= precoMax);
 
-    // 6. Atualiza a tela do catálogo
-    const container = document.getElementById('lista-maquinas');
-    
-    // Esconde a área de peças sanfonadas para não dar conflito, já que o filtro busca tudo
-    document.getElementById('sessao-pecas').style.display = 'none';
-    document.getElementById('sessao-maquinas').style.display = 'block';
+    // 4. Ordenação
+    if (ordem === 'menor-preco') filtrados.sort((a, b) => a.preco - b.preco);
+    else if (ordem === 'maior-preco') filtrados.sort((a, b) => b.preco - a.preco);
 
-    if (container) {
-        container.innerHTML = filtrados.length > 0 
+    const containerMaquinas = document.getElementById('sessao-maquinas');
+    const containerGrid = document.getElementById('lista-maquinas');
+    const containerPecas = document.getElementById('sessao-pecas');
+
+    // 5. O SEGREDO DA SANFONA: Se for "Peças", monta em formato de lista expansível
+    if (cat === 'peca') {
+        containerMaquinas.style.display = 'none';
+        containerPecas.style.display = 'block';
+
+        if (filtrados.length === 0) {
+            containerPecas.innerHTML = '<p style="padding: 40px; text-align: center; color: #666;">Nenhuma peça encontrada.</p>';
+        } else {
+            let subcats = [...new Set(filtrados.map(p => p.subcategoria))];
+            
+            let htmlSanfona = subcats.map((sub, index) => {
+                let pecasDaSub = filtrados.filter(p => p.subcategoria === sub);
+                return `
+                    <div style="margin-bottom: 12px; border: 1px solid var(--borda); border-radius: 6px; overflow: hidden; background: #fff;">
+                        <button onclick="abrirSanfona('sanfona-${index}')" style="width: 100%; background: #fff; padding: 18px; border: none; text-align: left; font-size: 1.1em; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--grafite);">
+                            ${sub || 'Outras Peças'} <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="sanfona-${index}" style="max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out; background: #f9f9f9; padding: 0 15px;">
+                            ${pecasDaSub.map(p => `
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee;">
+                                    <div>
+                                        <strong style="color: var(--grafite); font-size: 1.05em;">${p.nome}</strong><br>
+                                        <span style="font-size:0.85em; color:#777;">Estoque: ${p.estoque} | ${p.descricao}</span>
+                                    </div>
+                                    <div style="text-align: right; min-width: 100px;">
+                                        <strong style="color: var(--verde-destaque); font-size: 1.1em; display: block; margin-bottom: 5px;">R$ ${p.preco.toFixed(2).replace('.',',')}</strong>
+                                        <a href="../produto/produto.html?nome=${encodeURIComponent(p.nome)}" style="font-size: 0.85em; color: var(--branco); background: var(--verde-principal); padding: 6px 12px; border-radius: 4px; text-decoration: none;">Detalhes</a>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            containerPecas.innerHTML = htmlSanfona;
+        }
+    } 
+    // Se não for "Peças", mostra os cartões normais!
+    else {
+        containerPecas.style.display = 'none';
+        containerMaquinas.style.display = 'block';
+
+        containerGrid.innerHTML = filtrados.length > 0 
             ? filtrados.map(p => criarCartao(p)).join('') 
             : '<p style="padding: 40px; text-align: center; width: 100%; color: #666;">Nenhum produto encontrado com estes filtros.</p>';
+    }
+};
+
+// 6. Função para animar a abertura da sanfona
+window.abrirSanfona = function(id) {
+    const elemento = document.getElementById(id);
+    if (elemento.style.maxHeight && elemento.style.maxHeight !== '0px') {
+        elemento.style.maxHeight = '0px';
+        elemento.style.paddingTop = '0px';
+        elemento.style.paddingBottom = '0px';
+    } else {
+        elemento.style.maxHeight = elemento.scrollHeight + 40 + 'px'; // +40px de respiro
+        elemento.style.paddingTop = '15px';
+        elemento.style.paddingBottom = '15px';
     }
 };
