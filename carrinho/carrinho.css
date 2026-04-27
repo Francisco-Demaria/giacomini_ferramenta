@@ -4,6 +4,7 @@
     --grafite: #333333; 
     --fundo: #f4f7f6; 
     --borda: #e5e5e5; 
+    --branco: #FFFFFF;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
