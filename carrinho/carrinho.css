@@ -13,20 +13,45 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
 .logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; margin: 0 auto;}
 .logo-img { height: 45px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.7); background: white; padding: 2px; }
 .logo-texto { color: white; font-size: 1.5em; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-.btn-menu { background: none; border: none; cursor: pointer; color: var(--branco); display: flex; align-items: center; gap: 10px; font-size: 1em; font-weight: bold; text-transform: uppercase; }
 
-/*Menu*/
-.gaveta { position: fixed; top: 0; height: 100vh; width: 320px; background: var(--branco); box-shadow: 5px 0 25px rgba(0,0,0,0.2); z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px 20px; display: flex; flex-direction: column; left: -340px;}
-.gaveta.aberto { left: 0; }
-.gaveta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--fundo); padding-bottom: 15px;}
-.gaveta-header h2 { color: var(--verde-principal); font-weight: 800; text-transform: uppercase; }
-.btn-fechar-menu { background: var(--fundo); color: var(--grafite); border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px; font-weight: bold; transition: 0.3s;}
-.btn-fechar-menu:hover { background: #e74c3c; color: white; }
-.menu-links { display: flex; flex-direction: column; gap: 5px; flex: 1; }
-.menu-links a { text-decoration: none; color: var(--grafite); font-size: 1em; padding: 15px; border-radius: 4px; display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s;}
-.menu-links a:hover { background: #e8f5e9; color: var(--verde-principal); border-left: 4px solid var(--verde-principal);}
-#overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 1500; }
+/* --- ESTILOS DO MENU LATERAL --- */
+.btn-menu { 
+    background: transparent; 
+    color: white; /* Deixa o ícone e texto brancos */
+    border: none; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    font-size: 1.1em; 
+    font-weight: bold;
+}
 
+#overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+    background: rgba(0,0,0,0.5); z-index: 1500; display: none; 
+}
+
+.menu-lateral { 
+    position: fixed; top: 0; left: -300px; width: 280px; height: 100vh; 
+    background: white; z-index: 2000; transition: left 0.3s ease; 
+    padding: 20px; box-shadow: 2px 0 15px rgba(0,0,0,0.2); 
+    display: flex; flex-direction: column; gap: 15px;
+}
+.menu-lateral.aberto { left: 0; }
+
+.btn-fechar { 
+    align-self: flex-end; background: transparent; border: none; 
+    font-size: 1.2em; color: var(--grafite); cursor: pointer; margin-bottom: 20px;
+}
+
+.menu-lateral a {
+    text-decoration: none; color: var(--grafite); font-size: 1.1em; 
+    display: flex; align-items: center; gap: 10px; padding: 10px;
+    border-radius: 5px; transition: 0.3s;
+}
+
+.menu-lateral a:hover { background: var(--fundo); color: var(--verde-principal); }
 .container { max-width: 900px; margin: 50px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
 .topo-carrinho { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--borda); padding-bottom: 20px; margin-bottom: 30px;}
 .btn-voltar { display: inline-flex; align-items: center; gap: 10px; background: white; color: var(--grafite); text-decoration: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; border: 1px solid var(--borda); transition: 0.3s; text-transform: uppercase; font-size: 0.9em;}

@@ -53,8 +53,23 @@ function enviarWhatsApp() {
     // renderizarCarrinho();
 }
 
-function abrirMenu() { document.getElementById('menu-lateral').classList.add('aberto'); document.getElementById('overlay').style.display = 'block'; }
-function fecharMenu() { document.getElementById('menu-lateral').classList.remove('aberto'); document.getElementById('overlay').style.display = 'none'; }
+// --- FUNÇÕES DO MENU ---
+window.abrirMenu = function() {
+    const menu = document.getElementById('menu-lateral');
+    const overlay = document.getElementById('overlay');
+    if(menu && overlay) {
+        menu.classList.add('aberto');
+        overlay.style.display = 'block';
+    }
+};
 
+window.fecharMenu = function() {
+    const menu = document.getElementById('menu-lateral');
+    const overlay = document.getElementById('overlay');
+    if(menu && overlay) {
+        menu.classList.remove('aberto');
+        overlay.style.display = 'none';
+    }
+};
 
 window.onload = renderizarCarrinho;
