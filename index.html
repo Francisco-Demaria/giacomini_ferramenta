@@ -143,26 +143,47 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-<footer>
-    <h3>Giacomini Ferramentas</h3>
-    <p>Soluções Industriais e Profissionais de Alta Performance - Joinville/SC</p>
-    
-    <p style="font-size: 0.9em; margin-top: 10px;">
-        <i class="fas fa-phone"></i> (47) 3804-4048 | 
-        <i class="fab fa-whatsapp"></i> (47) 98905-0263 | 
-        <i class="fas fa-envelope"></i> giacomini.adm@outlook.com
-    </p>
+    <footer>
+        <h3>Giacomini Ferramentas</h3>
+        <p>Soluções Industriais e Profissionais de Alta Performance - Joinville/SC</p>
+        
+        <p style="font-size: 0.9em; margin-top: 10px;">
+            <i class="fas fa-phone"></i> (47) 3804-4048 | 
+            <i class="fab fa-whatsapp"></i> (47) 98905-0263 | 
+            <i class="fas fa-envelope"></i> giacomini.adm@outlook.com
+        </p>
 
-    <div class="social-links" style="margin-top: 15px;">
-        <a href="https://wa.me/5547989050263" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://www.instagram.com/giacominimanutencao/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.facebook.com/giacominimanutencao/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <div class="social-links" style="margin-top: 15px;">
+            <a href="https://wa.me/5547989050263" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.instagram.com/giacominimanutencao/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/giacominimanutencao/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        </div>
+
+        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8em; opacity: 0.7;">
+            <p>Desenvolvido por: <strong>Francisco | demariafranciscodemelo@gmail.com</strong></p>
+        </div>
+    </footer>
+
+    <button id="btn-chat" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: var(--verde-principal); color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 24px;">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+
+    <div id="janela-chat" style="display: none; position: fixed; bottom: 90px; right: 20px; z-index: 9999; width: 350px; height: 500px; background: white; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); overflow: hidden; border: 2px solid var(--verde-principal);">
+        <button onclick="document.getElementById('janela-chat').style.display='none'" style="position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; border: none; padding: 5px 10px; cursor: pointer; z-index: 10000; border-radius: 4px; font-weight: bold;"><i class="fas fa-times"></i></button>
+        
+        <iframe src="https://huggingface.co/spaces/Francisco-Demaria/giacomini-bot" frameborder="0" width="100%" height="100%" style="border:none; padding-top:40px;"></iframe>
     </div>
 
-    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8em; opacity: 0.7;">
-        <p>Desenvolvido por: <strong>Francisco | demariafranciscodemelo@gmail.com</strong></p>
-    </div>
-</footer>
+    <script>
+        document.getElementById('btn-chat').onclick = function() {
+            var janela = document.getElementById('janela-chat');
+            if (janela.style.display === 'none') {
+                janela.style.display = 'block';
+            } else {
+                janela.style.display = 'none';
+            }
+        };
+    </script>
 
     <script src="index.js"></script>
 </body>
