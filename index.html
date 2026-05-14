@@ -164,27 +164,7 @@
         </div>
     </footer>
 
-    <button id="btn-chat" style="position: fixed; bottom: 100px; right: 32px; z-index: 9999; background: var(--verde-principal); color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 24px;">
-        <i class="fas fa-comment-dots"></i>
-    </button>
-
-    <div id="janela-chat" style="display: none; position: fixed; bottom: 170px; right: 20px; z-index: 9999; width: 400px; height: 500px; background: white; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); overflow: hidden; border: 2px solid var(--verde-principal);">
-        <button onclick="document.getElementById('janela-chat').style.display='none'" style="position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; border: none; padding: 5px 10px; cursor: pointer; z-index: 10000; border-radius: 4px; font-weight: bold;"><i class="fas fa-times"></i></button>
-        
-        <iframe src="https://francisco-demaria-giacomini-bot.hf.space/" frameborder="0" width="100%" height="100%" style="border:none; padding-top:40px;"></iframe>
-    </div>
-
-    <script>
-        document.getElementById('btn-chat').onclick = function() {
-            var janela = document.getElementById('janela-chat');
-            if (janela.style.display === 'none') {
-                janela.style.display = 'block';
-            } else {
-                janela.style.display = 'none';
-            }
-        };
-    </script>
-
     <script src="index.js"></script>
+    
 </body>
 </html>

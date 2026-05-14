@@ -1,5 +1,5 @@
 const URL_PLANILHA = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjwdcNetNoRZzXi20wyCVlMwhQf86ckoI8ZcIDui7wnvQpxUg7NIAio6HEu_CMHqyG1yT4Rcee_q6H/pub?output=csv';
-const IMG_FALHA = 'https://via.placeholder.com/150?text=Sem+Foto'; // Evita erro 404 no VSCode
+const IMG_FALHA = 'https://via.placeholder.com/150?text=Sem+Foto';
 
 function atualizarContador() {
     let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
@@ -30,8 +30,8 @@ async function carregarProduto() {
             
             // JÁ FAZEMOS O CÁLCULO AQUI PARA NÃO QUEBRAR OS RECOMENDADOS!
             let custo = parseFloat(col[3]) || 0;
-            let precoVenda = Math.floor(custo * 1.35) + 0.99;
-            let precoTabela = Math.floor(custo * 1.65) + 0.99;
+            let precoVenda = Math.floor(custo * 1.3) + 0.99;
+            let precoTabela = Math.floor(custo * 1.7) + 0.99;
 
             return {
                 nome: col[0] ? col[0].trim().replace(/^"|"$/g, '') : '',

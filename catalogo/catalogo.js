@@ -29,9 +29,9 @@ function criarCartao(p) {
 
     // CÁLCULO DOS PREÇOS (Baseado no custo da planilha)
     // À vista: Custo * 1.35 e arredonda para baixo + 0.99
-    let precoAVista = Math.floor(p.preco * 1.35) + 0.99;
+    let precoAVista = Math.floor(p.preco * 1.3) + 0.99;
     // Parcelado: Custo * 1.45 e arredonda para baixo + 0.99
-    let precoParcelado = Math.floor(p.preco * 1.45) + 0.99;
+    let precoParcelado = Math.floor(p.preco * 1.5) + 0.99;
     let valorParcela = (precoParcelado / 5).toFixed(2).replace('.', ',');
 
     return `

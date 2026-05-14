@@ -19,9 +19,9 @@ function criarCartao(p) {
 
     // LÓGICA DE PREÇOS
     let custo = parseFloat(p.preco);
-    let precoTabela = Math.floor(custo * 1.65) + 0.99; // Preço "De:" (Sugestão de desconto)
-    let precoAVista = Math.floor(custo * 1.35) + 0.99; // Preço "Por:"
-    let precoParcelado = Math.floor(custo * 1.45) + 0.99;
+    let precoTabela = Math.floor(custo * 1.7) + 0.99; // Preço "De:" (Sugestão de desconto)
+    let precoAVista = Math.floor(custo * 1.3) + 0.99; // Preço "Por:"
+    let precoParcelado = Math.floor(custo * 1.5) + 0.99;
     let valorParcela = (precoParcelado / 5).toFixed(2).replace('.', ',');
 
     return `
