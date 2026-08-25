@@ -62,11 +62,6 @@ function criarCartao(p) {
     // LÓGICA DE PREÇOS
     // =========================================================
 
-    let custo = parseFloat(p.preco) || 0;
-
-    // Verifica se existe um valor especial na planilha
-    let precoEspecial = parseFloat(p.precoAntigo) || 0;
-
     const precos = calcularPrecos(p);
 
     const precoTabela = precos.precoDe;
@@ -75,11 +70,6 @@ function criarCartao(p) {
 
     const valorParcela =
         (precoParcelado / 5)
-            .toFixed(2)
-            .replace('.', ',');
-
-        // Valor de cada parcela
-        let valorParcela = (precoParcelado / 5)
             .toFixed(2)
             .replace('.', ',');
 
