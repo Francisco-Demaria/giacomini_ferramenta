@@ -67,10 +67,6 @@ function criarCartao(p) {
     // Verifica se existe um valor especial na planilha
     let precoEspecial = parseFloat(p.precoAntigo) || 0;
 
-    let precoTabela;
-    let precoAVista;
-    let precoParcelado;
-
     const precos = calcularPrecos(p);
 
     const precoTabela = precos.precoDe;
