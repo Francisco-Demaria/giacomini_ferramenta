@@ -135,3 +135,8 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
 .btn-zap-flutuante:hover { transform: scale(1.1); background: #1ebe5d; }
 .btn-zap-flutuante i { color: white; font-size: 2.2em; }
 
+.skeleton-card{
+    height:320px;
+    border-radius:16px;
+    animation:pulse 1.4s infinite;
+}
