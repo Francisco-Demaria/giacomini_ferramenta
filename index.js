@@ -36,45 +36,6 @@ function criarCartao(p) {
             .toFixed(2)
             .replace('.', ',');
 
-    // ---------------------------------------------------------
-    // CASO 1:
-    // Não existe preço especial na planilha
-    // Usa a margem automática
-    // ---------------------------------------------------------
-
-    if (precoEspecial <= 0) {
-
-        precoTabela = Math.floor(custo * 1.7) + 0.99;
-
-        precoAVista = Math.floor(custo * 1.3) + 0.99;
-
-        precoParcelado = Math.floor(custo * 1.5) + 0.99;
-
-    }
-
-    // ---------------------------------------------------------
-    // CASO 2:
-    // Existe um valor especial na planilha
-    // ---------------------------------------------------------
-
-    else {
-
-        // O valor informado na planilha será usado
-        // como preço especial à vista.
-        precoAVista = precoEspecial;
-
-        // Mantém o preço parcelado calculado normalmente
-        // por enquanto.
-        precoParcelado = Math.floor(custo * 1.5) + 0.99;
-
-        // O "De:" será baseado no preço à vista.
-        precoTabela = Math.floor(precoAVista * 1.3) + 0.99;
-    }
-
-    // Valor de cada parcela
-    let valorParcela = (precoParcelado / 5)
-        .toFixed(2)
-        .replace('.', ',');
 
 
     // =========================================================
