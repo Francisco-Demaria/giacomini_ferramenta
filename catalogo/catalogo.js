@@ -46,45 +46,21 @@ function criarCartao(p) {
     let precoAVista;
     let precoParcelado;
 
-    // ---------------------------------------------------------
-    // CASO 1:
-    // Não existe preço especial na planilha
-    // Usa a margem automática
-    // ---------------------------------------------------------
+    const precos = calcularPrecos(p);
 
-    if (precoEspecial <= 0) {
+    const precoTabela = precos.precoDe;
+    const precoAVista = precos.precoVista;
+    const precoParcelado = precos.precoParcelado;
 
-        precoTabela = Math.floor(custo * 1.7) + 0.99;
+    const valorParcela =
+        (precoParcelado / 5)
+            .toFixed(2)
+            .replace('.', ',');
 
-        precoAVista = Math.floor(custo * 1.3) + 0.99;
-
-        precoParcelado = Math.floor(custo * 1.5) + 0.99;
-
-    }
-
-    // ---------------------------------------------------------
-    // CASO 2:
-    // Existe um valor especial na planilha
-    // ---------------------------------------------------------
-
-    else {
-
-        // O valor informado na planilha será usado
-        // como preço especial à vista.
-        precoAVista = precoEspecial;
-
-        // Mantém o preço parcelado calculado normalmente
-        // por enquanto.
-        precoParcelado = Math.floor(custo * 1.5) + 0.99;
-
-        // O "De:" será baseado no preço à vista.
-        precoTabela = Math.floor(precoAVista * 1.3) + 0.99;
-    }
-
-    // Valor de cada parcela
-    let valorParcela = (precoParcelado / 5)
-        .toFixed(2)
-        .replace('.', ',');
+        // Valor de cada parcela
+        let valorParcela = (precoParcelado / 5)
+            .toFixed(2)
+            .replace('.', ',');
 
 
     // =========================================================
@@ -200,26 +176,6 @@ async function carregarCatalogo() {
 
         todosOsProdutosDaPlanilha =
             [...produtos];
-        const dadosTexto = await resposta.text();
-        const linhas = dadosTexto.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
-
-        let produtos = linhas.map(linha => {
-            const col = linha.split(',');
-            if (col.length < 4) return null; 
-            
-            return {
-                nome: col[0] ? col[0].trim() : '',
-                categoria: col[1] ? col[1].trim() : '',
-                subcategoria: col[2] ? col[2].trim() : '',
-                preco: parseFloat(col[3]) || 0,
-                precoAntigo: parseFloat(col[4]) || 0,
-                img: col[5] ? col[5].trim() : '',
-                estoque: parseInt(col[6]) || 0,
-                descricao: col[7] ? col[7].trim() : ''
-            };
-        }).filter(p => p !== null && p.estoque > 0);
-
-        todosOsProdutosDaPlanilha = [...produtos];
         
         // --- INÍCIO DA LÓGICA DE BUSCA ---
         // Verifica se existe o parâmetro "?busca=" na URL
