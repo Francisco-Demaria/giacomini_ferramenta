@@ -14,43 +14,167 @@ function fazerBusca() {
 
 function criarCartao(p) {
     let img = p.img;
-    if (img !== '' && !img.startsWith('http') && !img.startsWith('img/')) { img = 'img/' + img; }
-    if (img === '') img = 'padrao.png';
 
+    if (img !== '' && !img.startsWith('http') && !img.startsWith('img/')) {
+        img = 'img/' + img;
+    }
+
+    if (img === '') {
+        img = 'padrao.png';
+    }
+
+    // =========================================================
     // LÓGICA DE PREÇOS
-    let custo = parseFloat(p.preco);
-    let precoTabela = Math.floor(custo * 1.7) + 0.99; // Preço "De:" (Sugestão de desconto)
-    let precoAVista = Math.floor(custo * 1.3) + 0.99; // Preço "Por:"
-    let precoParcelado = Math.floor(custo * 1.5) + 0.99;
-    let valorParcela = (precoParcelado / 5).toFixed(2).replace('.', ',');
+    // =========================================================
+
+    let custo = parseFloat(p.preco) || 0;
+
+    // Verifica se existe um valor especial na planilha
+    let precoEspecial = parseFloat(p.precoAntigo) || 0;
+
+    let precoTabela;
+    let precoAVista;
+    let precoParcelado;
+
+    // ---------------------------------------------------------
+    // CASO 1:
+    // Não existe preço especial na planilha
+    // Usa a margem automática
+    // ---------------------------------------------------------
+
+    if (precoEspecial <= 0) {
+
+        precoTabela = Math.floor(custo * 1.7) + 0.99;
+
+        precoAVista = Math.floor(custo * 1.3) + 0.99;
+
+        precoParcelado = Math.floor(custo * 1.5) + 0.99;
+
+    }
+
+    // ---------------------------------------------------------
+    // CASO 2:
+    // Existe um valor especial na planilha
+    // ---------------------------------------------------------
+
+    else {
+
+        // O valor informado na planilha será usado
+        // como preço especial à vista.
+        precoAVista = precoEspecial;
+
+        // Mantém o preço parcelado calculado normalmente
+        // por enquanto.
+        precoParcelado = Math.floor(custo * 1.5) + 0.99;
+
+        // O "De:" será baseado no preço à vista.
+        precoTabela = Math.floor(precoAVista * 1.3) + 0.99;
+    }
+
+    // Valor de cada parcela
+    let valorParcela = (precoParcelado / 5)
+        .toFixed(2)
+        .replace('.', ',');
+
+
+    // =========================================================
+    // HTML DO CARD
+    // =========================================================
 
     return `
-        <a href="produto/produto.html?nome=${encodeURIComponent(p.nome)}" style="text-decoration:none; color:inherit;">
+        <a href="produto/produto.html?nome=${encodeURIComponent(p.nome)}"
+           style="text-decoration:none; color:inherit;">
+
             <div class="cartao-produto">
-                <div class="selo-desconto">OFERTA</div>
-                <img src="${img}" alt="${p.nome}" onerror="this.src='padrao.png'">
+
+                <div class="selo-desconto">
+                    OFERTA
+                </div>
+
+                <img
+                    src="${img}"
+                    alt="${p.nome}"
+                    onerror="this.src='padrao.png'"
+                >
+
                 <h3>${p.nome}</h3>
-                
-                <div class="precos-container" style="margin-top: auto; text-align: center;">
-                    <div style="text-decoration: line-through; color: #999; font-size: 0.85em;">
-                        De: R$ ${precoTabela.toFixed(2).replace('.', ',')}
+
+                <div
+                    class="precos-container"
+                    style="margin-top: auto; text-align: center;"
+                >
+
+                    <div
+                        style="
+                            text-decoration: line-through;
+                            color: #999;
+                            font-size: 0.85em;
+                        "
+                    >
+                        De:
+                        R$
+                        ${precoTabela.toFixed(2).replace('.', ',')}
                     </div>
-                    <div style="color: #666; font-size: 0.85em;">Por apenas</div>
-                    <div style="color: var(--verde-principal); font-weight: 900; font-size: 1.4em; margin-bottom: 5px;">
-                        R$ ${precoAVista.toFixed(2).replace('.', ',')} <small style="font-size:0.5em">à vista</small>
+
+                    <div
+                        style="
+                            color: #666;
+                            font-size: 0.85em;
+                        "
+                    >
+                        Por apenas
                     </div>
-                    
-                    <div style="color: #444; font-size: 0.9em; font-weight: bold;">
+
+                    <div
+                        style="
+                            color: var(--verde-principal);
+                            font-weight: 900;
+                            font-size: 1.4em;
+                            margin-bottom: 5px;
+                        "
+                    >
+                        R$
+                        ${precoAVista.toFixed(2).replace('.', ',')}
+
+                        <small style="font-size:0.5em">
+                            à vista
+                        </small>
+                    </div>
+
+                    <div
+                        style="
+                            color: #444;
+                            font-size: 0.9em;
+                            font-weight: bold;
+                        "
+                    >
                         ou 5x de R$ ${valorParcela}
                     </div>
-                    <div style="color: #888; font-size: 0.75em; margin-bottom: 15px;">
-                        (R$ ${precoParcelado.toFixed(2).replace('.', ',')} no cartão)
+
+                    <div
+                        style="
+                            color: #888;
+                            font-size: 0.75em;
+                            margin-bottom: 15px;
+                        "
+                    >
+                        (R$
+                        ${precoParcelado.toFixed(2).replace('.', ',')}
+                        no cartão)
                     </div>
-                    
-                    <button class="btn-comprar" style="width: 100%;">Ver Detalhes</button>
+
+                    <button
+                        class="btn-comprar"
+                        style="width: 100%;"
+                    >
+                        Ver Detalhes
+                    </button>
+
                 </div>
             </div>
-        </a>`;
+
+        </a>
+    `;
 }
 
 function abrirMenu() { document.getElementById('menu-lateral').classList.add('aberto'); document.getElementById('overlay').style.display = 'block'; }
