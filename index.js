@@ -1,5 +1,3 @@
-const URL_PLANILHA = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjwdcNetNoRZzXi20wyCVlMwhQf86ckoI8ZcIDui7wnvQpxUg7NIAio6HEu_CMHqyG1yT4Rcee_q6H/pub?output=csv';
-
 function atualizarContador() {
     let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
     let contador = document.getElementById('contador-carrinho');
@@ -27,14 +25,16 @@ function criarCartao(p) {
     // LÓGICA DE PREÇOS
     // =========================================================
 
-    let custo = parseFloat(p.preco) || 0;
+    const precos = calcularPrecos(p);
 
-    // Verifica se existe um valor especial na planilha
-    let precoEspecial = parseFloat(p.precoAntigo) || 0;
+    const precoTabela = precos.precoDe;
+    const precoAVista = precos.precoVista;
+    const precoParcelado = precos.precoParcelado;
 
-    let precoTabela;
-    let precoAVista;
-    let precoParcelado;
+    const valorParcela =
+        (precoParcelado / 5)
+            .toFixed(2)
+            .replace('.', ',');
 
     // ---------------------------------------------------------
     // CASO 1:
@@ -242,54 +242,75 @@ iniciarAutomatico();
 
 async function carregarDados() {
     try {
-        const resposta = await fetch(URL_PLANILHA);
-        const dadosTexto = await resposta.text();
-        const linhas = dadosTexto.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
+        const produtos = await carregarProdutos();
 
-        let produtos = linhas.map(linha => {
-            const col = linha.split(',');
-            if (col.length < 8) return null;
+        const produtosDisponiveis =
+            produtos.filter(p => p.estoque > 0);
 
-            return {
-                nome: col[0] ? col[0].trim() : '',
-                categoria: col[1] ? col[1].trim() : '',
-                subcategoria: col[2] ? col[2].trim() : '',
-                preco: parseFloat(col[3]) || 0,
-                precoAntigo: parseFloat(col[4]) || 0,
-                img: col[5] ? col[5].trim() : '',
-                estoque: parseInt(col[6]) || 0,
-                descricao: col[7] ? col[7].trim() : ''
-            };
-        }).filter(p => p !== null && p.estoque > 0);
+        const apenasMaquinas =
+            produtosDisponiveis.filter(p =>
+                !p.categoria.toLowerCase().includes('peça') &&
+                !p.categoria.toLowerCase().includes('peca')
+            );
 
-        // 1. Tira as peças da página inicial
-        let apenasMaquinas = produtos.filter(p => !p.categoria.toLowerCase().includes('peça') && !p.categoria.toLowerCase().includes('peca'));
+        // DESTAQUES
+        const destaques = [...apenasMaquinas].sort((a, b) => {
+            if (a.estoque === b.estoque) {
+                return Math.random() - 0.5;
+            }
 
-        // 2. DESTAQUES: Produtos com MENOR estoque (se empatar, mistura aleatoriamente)
-        let destaques = [...apenasMaquinas].sort((a, b) => {
-            if (a.estoque === b.estoque) return Math.random() - 0.5;
-            return a.estoque - b.estoque; 
+            return a.estoque - b.estoque;
         });
-        let gridDest = document.getElementById('grid-destaques');
-        if(gridDest) gridDest.innerHTML = destaques.slice(0, 3).map(p => criarCartao(p)).join('');
-        
-        // 3. LANÇAMENTOS: Os últimos adicionados na planilha
-        let lancamentos = apenasMaquinas.slice(-3).reverse();
-        let gridLanc = document.getElementById('grid-lancamentos');
-        if(gridLanc) gridLanc.innerHTML = lancamentos.length > 0 ? lancamentos.map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhum lançamento recente.</p>";
-        
-        // 4. PROMOÇÕES: Maior porcentagem de desconto
-        let promocoes = apenasMaquinas.filter(p => p.precoAntigo > p.preco);
-        promocoes.sort((a, b) => {
-            let descA = (a.precoAntigo - a.preco) / a.precoAntigo;
-            let descB = (b.precoAntigo - b.preco) / b.precoAntigo;
-            return descB - descA; // Traz o maior desconto primeiro
-        });
-        let gridProm = document.getElementById('grid-promocoes');
-        if(gridProm) gridProm.innerHTML = promocoes.length > 0 ? promocoes.slice(0, 3).map(p => criarCartao(p)).join('') : "<p style='width:100%; text-align:center;'>Nenhuma oferta ativa no momento.</p>";
+
+        const gridDest =
+            document.getElementById('grid-destaques');
+
+        if (gridDest) {
+            gridDest.innerHTML =
+                destaques
+                    .slice(0, 3)
+                    .map(p => criarCartao(p))
+                    .join('');
+        }
+
+        // LANÇAMENTOS
+        const lancamentos =
+            apenasMaquinas.slice(-3).reverse();
+
+        const gridLanc =
+            document.getElementById('grid-lancamentos');
+
+        if (gridLanc) {
+            gridLanc.innerHTML =
+                lancamentos.length > 0
+                    ? lancamentos.map(p => criarCartao(p)).join('')
+                    : '<p>Nenhum lançamento recente.</p>';
+        }
+
+        // PROMOÇÕES
+        const promocoes =
+            apenasMaquinas.filter(p =>
+                p.precoAntigo > p.preco
+            );
+
+        const gridProm =
+            document.getElementById('grid-promocoes');
+
+        if (gridProm) {
+            gridProm.innerHTML =
+                promocoes.length > 0
+                    ? promocoes
+                        .slice(0, 3)
+                        .map(p => criarCartao(p))
+                        .join('')
+                    : '<p>Nenhuma oferta ativa no momento.</p>';
+        }
 
     } catch (erro) {
-        console.error("Erro na planilha", erro);
+        console.error(
+            'Erro ao carregar produtos:',
+            erro
+        );
     }
 }
 

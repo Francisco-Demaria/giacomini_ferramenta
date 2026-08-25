@@ -190,7 +190,16 @@ function criarCartao(p) {
 async function carregarCatalogo() {
     try {
         // O Date().getTime() gera um número diferente a cada milissegundo, forçando o download limpo
-        const resposta = await fetch(URL_PLANILHA + '&t=' + new Date().getTime());
+        const produtosCarregados =
+            await carregarProdutos();
+
+        let produtos =
+            produtosCarregados.filter(
+                p => p.estoque > 0
+            );
+
+        todosOsProdutosDaPlanilha =
+            [...produtos];
         const dadosTexto = await resposta.text();
         const linhas = dadosTexto.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
 
@@ -322,7 +331,8 @@ window.aplicarSuperFiltro = function() {
 // 3. Filtro de Preço (Mín e Máx) baseado no PREÇO DE VENDA
     filtrados = filtrados.filter(p => {
         // Calcula o preço final que o cliente realmente vê na tela
-        let precoVenda = Math.floor(p.preco * 1.35) + 0.99;
+        const precoVenda =
+            calcularPrecos(p).precoVista;
         
         // Compara se o preço de venda está dentro do que o cliente digitou
         return precoVenda >= precoMin && precoVenda <= precoMax;

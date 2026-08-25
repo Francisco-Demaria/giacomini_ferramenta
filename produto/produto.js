@@ -28,11 +28,6 @@ async function carregarProduto() {
             
             if (col.length < 4) return null; 
             
-            // JÁ FAZEMOS O CÁLCULO AQUI PARA NÃO QUEBRAR OS RECOMENDADOS!
-            let custo = parseFloat(col[3]) || 0;
-            let precoVenda = Math.floor(custo * 1.3) + 0.99;
-            let precoTabela = Math.floor(custo * 1.7) + 0.99;
-
             return {
                 nome: col[0] ? col[0].trim().replace(/^"|"$/g, '') : '',
                 categoria: col[1] ? col[1].trim().replace(/^"|"$/g, '') : '',
@@ -47,6 +42,23 @@ async function carregarProduto() {
         }).filter(p => p !== null);
 
         const produto = produtos.find(p => p.nome === nomeProduto);
+
+        const precos =
+            calcularPrecos(produto);
+
+        const precoVista =
+            precos.precoVista;
+
+        const precoParcelado =
+            precos.precoParcelado;
+
+        const precoDe =
+            precos.precoDe;
+
+        const valorParcela =
+            (precoParcelado / 5)
+                .toFixed(2)
+                .replace('.', ',');
 
         if (!produto) {
             document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Produto não encontrado ou sem stock.</p>';
