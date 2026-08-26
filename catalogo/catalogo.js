@@ -249,31 +249,30 @@ async function carregarCatalogo() {
         const containerPecas =
             document.getElementById('container-grupos-pecas');
 
-        // ==========================================
-        // MÁQUINAS
-        // ==========================================
+// ==========================================
+// MÁQUINAS
+// ==========================================
 
-        if (containerMaquinas) {
+if (containerMaquinas) {
 
-            produtosFiltrados = maquinas;
-            indiceAtual = 0;
+    produtosFiltrados = maquinas;
+    indiceAtual = 0;
 
-            containerMaquinas.innerHTML = '';
+    containerMaquinas.innerHTML = '';
 
-            if (produtosFiltrados.length > 0) {
+    if (produtosFiltrados.length > 0) {
 
-                renderizarMaisProdutos();
+        renderizarMaisProdutos();
 
-            } else {
+    } else {
 
-                containerMaquinas.innerHTML = `
-                    <p class="mensagem-vazia">
-                        Nenhum resultado encontrado.
-                    </p>
-                `;
-            }
-        }
-
+        containerMaquinas.innerHTML = `
+            <p class="mensagem-vazia">
+                Nenhum resultado encontrado.
+            </p>
+        `;
+    }
+}
         // ==========================================
         // PEÇAS
         // ==========================================
@@ -529,12 +528,26 @@ window.aplicarSuperFiltro = function() {
         containerPecas.style.display = 'none';
         containerMaquinas.style.display = 'block';
 
-        containerGrid.innerHTML = filtrados.length > 0 
-            ? filtrados.map(p => criarCartao(p)).join('') 
-            : '<p style="padding: 40px; text-align: center; width: 100%; color: #666;">Nenhum produto encontrado com estes filtros.</p>';
-    }
-};
+        containerPecas.style.display = 'none';
+        containerMaquinas.style.display = 'block';
 
+        produtosFiltrados = filtrados;
+        indiceAtual = 0;
+
+        containerGrid.innerHTML = '';
+
+        if (produtosFiltrados.length > 0) {
+            renderizarMaisProdutos();
+        } else {
+            containerGrid.innerHTML = `
+                <p class="mensagem-vazia">
+                    Nenhum produto encontrado com estes filtros.
+                </p>
+            `;
+        }
+    }
+}
+    
 // 6. Função para animar a abertura da sanfona
 window.abrirSanfona = function(id) {
     const elemento = document.getElementById(id);
@@ -552,6 +565,7 @@ window.abrirSanfona = function(id) {
 function abrirMenu() { document.getElementById('menu-lateral').classList.add('aberto'); document.getElementById('overlay').style.display = 'block'; }
 function fecharMenu() { document.getElementById('menu-lateral').classList.remove('aberto'); document.getElementById('overlay').style.display = 'none'; }
 
+
 const observer = new IntersectionObserver((entries) => {
 
     if (!entries[0].isIntersecting) return;
@@ -564,6 +578,9 @@ const observer = new IntersectionObserver((entries) => {
     rootMargin: '300px'
 });
 
-observer.observe(
-    document.getElementById('sentinela-produtos')
-);
+const sentinela =
+    document.getElementById('sentinela-produtos');
+
+if (sentinela) {
+    observer.observe(sentinela);
+}
