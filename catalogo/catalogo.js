@@ -10,20 +10,39 @@ let produtosFiltrados = [];
 let indiceAtual = 0;
 
 function renderizarMaisProdutos() {
+    const grid = document.getElementById('lista-maquinas');
+    const loading = document.getElementById('loading-produtos');
+    const fim = document.getElementById('fim-produtos');
 
-    const grid = document.getElementById('grid-catalogo');
+    if (!grid) return;
 
     const lote = produtosFiltrados.slice(
         indiceAtual,
         indiceAtual + PRODUTOS_POR_LOTE
     );
 
-    lote.forEach(produto => {
-        grid.innerHTML += criarCartao(produto);
-    });
+    if (lote.length === 0) {
+        loading.hidden = true;
+        fim.hidden = false;
+        return;
+    }
 
-    indiceAtual += PRODUTOS_POR_LOTE;
+    loading.hidden = false;
+    fim.hidden = true;
 
+    grid.insertAdjacentHTML(
+        'beforeend',
+        lote.map(criarCartao).join('')
+    );
+
+    indiceAtual += lote.length;
+
+    if (indiceAtual >= produtosFiltrados.length) {
+        loading.hidden = true;
+        fim.hidden = false;
+    } else {
+        loading.hidden = true;
+    }
 }
 
 function atualizarContador() {
@@ -177,89 +196,242 @@ function criarCartao(p) {
 
 async function carregarCatalogo() {
     try {
-        // O Date().getTime() gera um número diferente a cada milissegundo, forçando o download limpo
-        const produtosCarregados =
-            await carregarProdutos();
+        const produtosCarregados = await carregarProdutos();
 
-        let produtos =
-            produtosCarregados.filter(
-                p => p.estoque > 0
-            );
+        let produtos = produtosCarregados.filter(
+            p => p.estoque > 0
+        );
 
-        todosOsProdutosDaPlanilha =
-            [...produtos];
-        
-        // --- INÍCIO DA LÓGICA DE BUSCA ---
-        // Verifica se existe o parâmetro "?busca=" na URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const termoBusca = urlParams.get('busca');
+        todosOsProdutosDaPlanilha = [...produtos];
+
+        // ==========================================
+        // BUSCA PELA URL
+        // ==========================================
+
+        const urlParams =
+            new URLSearchParams(window.location.search);
+
+        const termoBusca =
+            urlParams.get('busca');
 
         if (termoBusca) {
-            const termoMinusculo = termoBusca.toLowerCase();
-            // Filtra os produtos onde o NOME ou a DESCRIÇÃO contenham o termo pesquisado
-            produtos = produtos.filter(p => 
-                p.nome.toLowerCase().includes(termoMinusculo) || 
+            const termoMinusculo =
+                termoBusca.toLowerCase().trim();
+
+            produtos = produtos.filter(p =>
+                p.nome.toLowerCase().includes(termoMinusculo) ||
                 p.descricao.toLowerCase().includes(termoMinusculo)
             );
-            
-            // Opcional: Mostra para o usuário o que ele pesquisou na tela (se quiser adicionar um elemento HTML depois)
-            console.log("Mostrando resultados para:", termoBusca);
+
+            console.log(
+                "Mostrando resultados para:",
+                termoBusca
+            );
         }
-        // --- FIM DA LÓGICA DE BUSCA ---
 
-        const maquinas = produtos.filter(p => !p.categoria.toLowerCase().includes('peça') && !p.categoria.toLowerCase().includes('peca'));
-        const pecas = produtos.filter(p => p.categoria.toLowerCase().includes('peça') || p.categoria.toLowerCase().includes('peca'));
+        // ==========================================
+        // SEPARAÇÃO: MÁQUINAS / PEÇAS
+        // ==========================================
 
-        const containerMaquinas = document.getElementById('lista-maquinas');
-        const containerPecas = document.getElementById('container-grupos-pecas');
+        const maquinas = produtos.filter(p =>
+            !p.categoria.toLowerCase().includes('peça') &&
+            !p.categoria.toLowerCase().includes('peca')
+        );
+
+        const pecas = produtos.filter(p =>
+            p.categoria.toLowerCase().includes('peça') ||
+            p.categoria.toLowerCase().includes('peca')
+        );
+
+        const containerMaquinas =
+            document.getElementById('lista-maquinas');
+
+        const containerPecas =
+            document.getElementById('container-grupos-pecas');
+
+        // ==========================================
+        // MÁQUINAS
+        // ==========================================
 
         if (containerMaquinas) {
-            containerMaquinas.innerHTML = maquinas.length > 0 ? maquinas.map(p => criarCartao(p)).join('') : '<p style="width:100%; text-align:center;">Nenhum resultado encontrado.</p>';
+
+            produtosFiltrados = maquinas;
+            indiceAtual = 0;
+
+            containerMaquinas.innerHTML = '';
+
+            if (produtosFiltrados.length > 0) {
+
+                renderizarMaisProdutos();
+
+            } else {
+
+                containerMaquinas.innerHTML = `
+                    <p class="mensagem-vazia">
+                        Nenhum resultado encontrado.
+                    </p>
+                `;
+            }
         }
 
+        // ==========================================
+        // PEÇAS
+        // ==========================================
+
         if (containerPecas) {
+
             if (pecas.length > 0) {
+
                 let grupos = {};
+
                 pecas.forEach(p => {
-                    let sub = p.subcategoria === '' ? 'Outras Peças' : p.subcategoria;
-                    if (!grupos[sub]) grupos[sub] = [];
+
+                    let sub =
+                        p.subcategoria === ''
+                            ? 'Outras Peças'
+                            : p.subcategoria;
+
+                    if (!grupos[sub]) {
+                        grupos[sub] = [];
+                    }
+
                     grupos[sub].push(p);
                 });
 
                 let htmlGrupos = '';
+
                 for (let subcat in grupos) {
-                    let idSubcat = subcat.replace(/[^a-zA-Z0-9]/g, '').toLowerCase(); 
-                    
+
+                    let idSubcat =
+                        subcat
+                            .replace(/[^a-zA-Z0-9]/g, '')
+                            .toLowerCase();
+
                     htmlGrupos += `
-                    <div>
-                        <div class="sanfona-subcategoria" onclick="abrirSubcategoria('${idSubcat}')">
-                            <span>⚙️ ${subcat} <span style="font-size:0.8em; font-weight:normal; color:#666;">(${grupos[subcat].length} itens)</span></span>
-                            <span>▼</span>
-                        </div>
-                        <div class="conteudo-subcategoria" id="subcat-${idSubcat}">
-                            ${grupos[subcat].map(p => `
-                                <div class="item-peca-simples">
-                                    <div>
-                                        <strong style="font-size:1.1em;">${p.nome}</strong><br>
-                                        <span style="color:#666; font-size: 0.9em;">Estoque: ${p.estoque} | ${p.descricao}</span>
+                        <div>
+
+                            <div
+                                class="sanfona-subcategoria"
+                                onclick="abrirSubcategoria('${idSubcat}')"
+                            >
+                                <span>
+                                    ⚙️ ${subcat}
+
+                                    <span
+                                        style="
+                                            font-size:0.8em;
+                                            font-weight:normal;
+                                            color:#666;
+                                        "
+                                    >
+                                        (${grupos[subcat].length} itens)
+                                    </span>
+                                </span>
+
+                                <span>▼</span>
+                            </div>
+
+                            <div
+                                class="conteudo-subcategoria"
+                                id="subcat-${idSubcat}"
+                            >
+
+                                ${grupos[subcat].map(p => `
+
+                                    <div class="item-peca-simples">
+
+                                        <div>
+
+                                            <strong
+                                                style="
+                                                    font-size:1.1em;
+                                                "
+                                            >
+                                                ${p.nome}
+                                            </strong>
+
+                                            <br>
+
+                                            <span
+                                                style="
+                                                    color:#666;
+                                                    font-size:0.9em;
+                                                "
+                                            >
+                                                Estoque:
+                                                ${p.estoque}
+                                                |
+                                                ${p.descricao}
+                                            </span>
+
+                                        </div>
+
+                                        <div
+                                            class="direita"
+                                            style="
+                                                text-align:right;
+                                                min-width:120px;
+                                            "
+                                        >
+
+                                            <strong
+                                                style="
+                                                    color:var(--verde-destaque);
+                                                    display:block;
+                                                    margin-bottom:8px;
+                                                    font-size:1.2em;
+                                                "
+                                            >
+                                                R$
+                                                ${p.preco
+                                                    .toFixed(2)
+                                                    .replace('.', ',')}
+                                            </strong>
+
+                                            <a
+                                                href="../produto/produto.html?nome=${encodeURIComponent(p.nome)}"
+                                                class="btn-comprar"
+                                                style="
+                                                    padding:8px 15px;
+                                                    font-size:0.9em;
+                                                    text-decoration:none;
+                                                    display:inline-block;
+                                                "
+                                            >
+                                                Ver Detalhes
+                                            </a>
+
+                                        </div>
+
                                     </div>
-                                    <div class="direita" style="text-align: right; min-width: 120px;">
-                                        <strong style="color:var(--verde-destaque); display:block; margin-bottom:8px; font-size:1.2em;">R$ ${p.preco.toFixed(2).replace('.', ',')}</strong>
-                                        <a href="../produto/produto.html?nome=${encodeURIComponent(p.nome)}" class="btn-comprar" style="padding: 8px 15px; font-size: 0.9em; text-decoration:none; display:inline-block;">Ver Detalhes</a>
-                                    </div>
-                                </div>
-                            `).join('')}
+
+                                `).join('')}
+
+                            </div>
+
                         </div>
-                    </div>`;
+                    `;
                 }
-                containerPecas.innerHTML = htmlGrupos;
+
+                containerPecas.innerHTML =
+                    htmlGrupos;
+
             } else {
-                containerPecas.innerHTML = '<p style="text-align:center;">Nenhum resultado encontrado.</p>';
+
+                containerPecas.innerHTML = `
+                    <p class="mensagem-vazia">
+                        Nenhum resultado encontrado.
+                    </p>
+                `;
             }
         }
 
     } catch (erro) {
-        console.error("Erro na planilha", erro);
+
+        console.error(
+            "Erro na planilha",
+            erro
+        );
     }
 }
 

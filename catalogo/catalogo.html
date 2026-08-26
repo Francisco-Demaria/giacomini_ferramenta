@@ -94,21 +94,21 @@
             </aside>
             <section class="conteudo-principal">
                 
-                <div id="sessao-maquinas" style="display: block;">
-                    <div id="lista-maquinas" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; width: 100%;"></div>
-                </div>
+                <section id="sessao-maquinas">
+                    <div id="lista-maquinas" class="grid-produtos"></div>
+                </section>
 
-                <div id="sessao-pecas" style="display: none;">
+                <section id="sessao-pecas" hidden>
                     <div id="container-grupos-pecas"></div>
-                </div>
+                </section>
 
-                <div id="sentinela-produtos"></div>
+                <div id="sentinela-produtos" aria-hidden="true"></div>
 
-                <div id="loading-produtos">
+                <div id="loading-produtos" hidden>
                     Carregando mais produtos...
                 </div>
 
-                <div id="fim-produtos">
+                <div id="fim-produtos" hidden>
                     Você chegou ao fim do catálogo.
                 </div>
 

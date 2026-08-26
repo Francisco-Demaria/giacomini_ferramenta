@@ -140,3 +140,31 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
     border-radius:16px;
     animation:pulse 1.4s infinite;
 }
+
+#sentinela-produtos {
+    height: 1px;
+}
+
+#loading-produtos,
+#fim-produtos {
+    text-align: center;
+    padding: 30px 20px;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+#loading-produtos {
+    font-weight: 600;
+    color: var(--verde-principal);
+}
+
+#fim-produtos {
+    color: #888;
+}
+
+.mensagem-vazia {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px 20px;
+    color: #666;
+}
