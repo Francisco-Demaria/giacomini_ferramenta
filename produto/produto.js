@@ -1,4 +1,4 @@
-const IMG_FALHA = 'https://via.placeholder.com/150?text=Sem+Foto';
+const IMG_FALHA = '../favicon.ico';
 
 function atualizarContador() {
     let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
@@ -295,9 +295,9 @@ function carregarRecomendados(todosProdutos, produtoAtual) {
             htmlImagemCard = `<div style="height: 20px;"></div>`; 
         }
 
-        let temDesconto = p.precoAntigo > p.preco;
-        let htmlPrecoAntigo = temDesconto ? `<div class="preco-antigo">De: R$ ${p.precoAntigo.toFixed(2).replace('.',',')}</div>` : `<div class="preco-antigo"></div>`;
-        let seloHTML = temDesconto ? `<div class="selo-desconto">${Math.round(((p.precoAntigo - p.preco) / p.precoAntigo) * 100)}% OFF</div>` : '';
+        let temDesconto = p.precoDe > p.precoVista;
+        let htmlPrecoAntigo = temDesconto ? `<div class="preco-antigo">De: R$ ${p.precoDe.toFixed(2).replace('.',',')}</div>` : `<div class="preco-antigo"></div>`;
+        let seloHTML = temDesconto ? `<div class="selo-desconto">${Math.round(((p.precoDe - p.precoVista) / p.precoDe) * 100)}% OFF</div>` : '';
         
         return `
             <a href="produto.html?nome=${encodeURIComponent(p.nome)}" style="text-decoration:none; color:inherit; display:block; height:100%;">
@@ -307,7 +307,7 @@ function carregarRecomendados(todosProdutos, produtoAtual) {
                     <h3>${p.nome}</h3>
                     <div style="width:100%; margin-top: auto;">
                         ${htmlPrecoAntigo}
-                        <div class="preco-atual">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+                        <div class="preco-atual">R$ ${p.precoVista.toFixed(2).replace('.', ',')}</div>
                         <button class="btn-comprar">Ver Detalhes</button>
                     </div>
                 </div>
