@@ -35,7 +35,7 @@ function calcularPrecos(produto) {
     return {
         precoVista: custo,
         precoParcelado: valorEspecial,
-        precoDe: precoVista * 1.7,
+        precoDe: custo * 1.7,
         possuiPrecoEspecial: true
     };
 }
