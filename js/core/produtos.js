@@ -8,24 +8,80 @@ function parseCSV(linha) {
     );
 }
 
-async function carregarProdutos() {
-    const resposta = await fetch(
-        URL_PLANILHA + '&t=' + Date.now()
-    );
+const CACHE_PRODUTOS = 'giacomini_produtos_cache';
+const TEMPO_CACHE = 5 * 60 * 1000; // 5 minutos
 
-    if (!resposta.ok) {
-        throw new Error('Não foi possível carregar a planilha.');
+async function carregarProdutos() {
+
+    // ==========================================
+    // 1. TENTA USAR O CACHE
+    // ==========================================
+
+    const cacheSalvo =
+        sessionStorage.getItem(CACHE_PRODUTOS);
+
+    if (cacheSalvo) {
+
+        try {
+
+            const cache =
+                JSON.parse(cacheSalvo);
+
+            const cacheValido =
+                Date.now() - cache.timestamp < TEMPO_CACHE;
+
+            if (cacheValido && Array.isArray(cache.produtos)) {
+
+                console.log('Produtos carregados do cache.');
+
+                return cache.produtos;
+            }
+
+        } catch (erro) {
+
+            console.warn(
+                'Cache inválido. Recarregando planilha.',
+                erro
+            );
+
+            sessionStorage.removeItem(
+                CACHE_PRODUTOS
+            );
+        }
     }
 
-    const dadosTexto = await resposta.text();
+    // ==========================================
+    // 2. BUSCA A PLANILHA
+    // ==========================================
 
-    const linhas = dadosTexto
-        .split(/\r?\n/)
-        .slice(1)
-        .filter(linha => linha.trim() !== '');
+    console.log('Carregando produtos da planilha...');
 
-    return linhas
+    const resposta = await fetch(URL_PLANILHA);
+
+    if (!resposta.ok) {
+        throw new Error(
+            'Não foi possível carregar a planilha.'
+        );
+    }
+
+    const dadosTexto =
+        await resposta.text();
+
+    // ==========================================
+    // 3. PROCESSA CSV
+    // ==========================================
+
+    const linhas =
+        dadosTexto
+            .split(/\r?\n/)
+            .slice(1)
+            .filter(
+                linha => linha.trim() !== ''
+            );
+
+    const produtos = linhas
         .map(linha => {
+
             const col = parseCSV(linha);
 
             if (col.length < 4) {
@@ -33,22 +89,42 @@ async function carregarProdutos() {
             }
 
             return {
+
                 nome: col[0] || '',
+
                 categoria: col[1] || '',
+
                 subcategoria: col[2] || '',
 
-                // Valor vindo da planilha
-                preco: parseFloat(col[3]) || 0,
+                preco:
+                    parseFloat(col[3]) || 0,
 
-                // Valor especial/tabelado
-                precoAntigo: parseFloat(col[4]) || 0,
+                precoAntigo:
+                    parseFloat(col[4]) || 0,
 
                 img: col[5] || '',
 
-                estoque: parseInt(col[6]) || 0,
+                estoque:
+                    parseInt(col[6]) || 0,
 
                 descricao: col[7] || ''
             };
         })
-        .filter(produto => produto !== null);
+        .filter(
+            produto => produto !== null
+        );
+
+    // ==========================================
+    // 4. SALVA NO CACHE
+    // ==========================================
+
+    sessionStorage.setItem(
+        CACHE_PRODUTOS,
+        JSON.stringify({
+            timestamp: Date.now(),
+            produtos: produtos
+        })
+    );
+
+    return produtos;
 }

@@ -98,7 +98,7 @@ function criarCartao(p) {
     // =========================================================
 
     return `
-        <a href="produto/produto.html?nome=${encodeURIComponent(p.nome)}"
+        <a href="../produto/produto.html?nome=${encodeURIComponent(p.nome)}"
            style="text-decoration:none; color:inherit;">
 
             <div class="cartao-produto">
