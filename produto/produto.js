@@ -66,11 +66,6 @@ async function carregarProduto() {
         }
 
         // ============================================
-        // 1. CÁLCULO DO PARCELAMENTO (PRODUTO PRINCIPAL)
-        // ============================================
-        let valorParcela = (precoParcelado / 5).toFixed(2).replace('.', ',');
-
-        // ============================================
         // 2. LÓGICA DE IMAGEM
         // ============================================
         const ehPeca = produto.categoria.toLowerCase().includes('peça') || produto.categoria.toLowerCase().includes('peca');
