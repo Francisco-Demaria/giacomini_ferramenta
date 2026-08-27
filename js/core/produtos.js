@@ -30,12 +30,20 @@ async function carregarProdutos() {
             const cacheValido =
                 Date.now() - cache.timestamp < TEMPO_CACHE;
 
-            if (cacheValido && Array.isArray(cache.produtos)) {
+            if (
+                cacheValido &&
+                Array.isArray(cache.produtos) &&
+                cache.produtos.every(p =>
+                    p.precoVista !== undefined &&
+                    p.precoParcelado !== undefined &&
+                    p.precoDe !== undefined
+                )
+            ) {
 
-                console.log('Produtos carregados do cache.');
+    console.log('Produtos carregados do cache.');
 
-                return cache.produtos;
-            }
+    return cache.produtos;
+}
 
         } catch (erro) {
 
@@ -115,28 +123,40 @@ async function carregarProdutos() {
         );
 
     // ==========================================
-    // 4. SALVA NO CACHE
+    // 4. PROCESSA OS PRODUTOS
+    // ==========================================
+
+    const produtosProcessados = produtos.map(produto => {
+
+        const precos = calcularPrecos(produto);
+
+        return {
+            ...produto,
+
+            precoDe: precos.precoDe,
+            precoVista: precos.precoVista,
+            precoParcelado: precos.precoParcelado,
+            possuiPrecoEspecial: precos.possuiPrecoEspecial
+        };
+    });
+
+
+    // ==========================================
+    // 5. SALVA NO CACHE
     // ==========================================
 
     sessionStorage.setItem(
         CACHE_PRODUTOS,
         JSON.stringify({
             timestamp: Date.now(),
-            produtos: produtos
+            produtos: produtosProcessados
         })
     );
 
-    function processarProdutos(produtos) {
-        return produtos.map(produto => {
-            const precos = calcularPrecos(produto);
 
-            return {
-                ...produto,
-                precoDe: precos.precoDe,
-                precoVista: precos.precoVista,
-                precoParcelado: precos.precoParcelado,
-                possuiPrecoEspecial: precos.possuiPrecoEspecial
-            };
-        });
-    }
+    // ==========================================
+    // 6. RETORNA OS PRODUTOS
+    // ==========================================
+
+    return produtosProcessados;
 }
