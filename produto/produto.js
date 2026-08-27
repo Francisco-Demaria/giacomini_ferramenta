@@ -1,4 +1,3 @@
-const URL_PLANILHA = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjwdcNetNoRZzXi20wyCVlMwhQf86ckoI8ZcIDui7wnvQpxUg7NIAio6HEu_CMHqyG1yT4Rcee_q6H/pub?output=csv';
 const IMG_FALHA = 'https://via.placeholder.com/150?text=Sem+Foto';
 
 function atualizarContador() {
