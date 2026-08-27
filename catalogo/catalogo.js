@@ -81,11 +81,9 @@ function criarCartao(p) {
     // LÓGICA DE PREÇOS
     // =========================================================
 
-    const precos = calcularPrecos(p);
-
-    const precoTabela = precos.precoDe;
-    const precoAVista = precos.precoVista;
-    const precoParcelado = precos.precoParcelado;
+    const precoTabela = p.precoDe;
+    const precoAVista = p.precoVista;
+    const precoParcelado = p.precoParcelado;   
 
     const valorParcela =
         (precoParcelado / 5)
@@ -202,7 +200,7 @@ async function carregarCatalogo() {
             p => p.estoque > 0
         );
 
-        todosOsProdutosDaPlanilha = [...produtos];
+        todosProdutos = [...produtos];
 
         // ==========================================
         // BUSCA PELA URL
@@ -382,7 +380,7 @@ if (containerMaquinas) {
                                                 "
                                             >
                                                 R$
-                                                ${p.preco
+                                                ${p.precoVista
                                                     .toFixed(2)
                                                     .replace('.', ',')}
                                             </strong>
@@ -444,9 +442,9 @@ function abrirSubcategoria(id) {
 window.onload = () => { carregarCatalogo(); atualizarContador(); };
 
 window.aplicarSuperFiltro = function() {
-    if (todosOsProdutosDaPlanilha.length === 0) return;
+    if (todosProdutos.length === 0) return;
 
-    let filtrados = [...todosOsProdutosDaPlanilha];
+    let filtrados = [...todosProdutos];
 
     const ordem = document.getElementById('filtro-ordem').value;
     const cat = document.querySelector('input[name="cat"]:checked').value;
@@ -471,7 +469,7 @@ window.aplicarSuperFiltro = function() {
     filtrados = filtrados.filter(p => {
         // Calcula o preço final que o cliente realmente vê na tela
         const precoVenda =
-            calcularPrecos(p).precoVista;
+            p.precoVista;
         
         // Compara se o preço de venda está dentro do que o cliente digitou
         return precoVenda >= precoMin && precoVenda <= precoMax;
@@ -510,7 +508,7 @@ window.aplicarSuperFiltro = function() {
                                         <span style="font-size:0.85em; color:#777;">Estoque: ${p.estoque} | ${p.descricao}</span>
                                     </div>
                                     <div style="text-align: right; min-width: 100px;">
-                                        <strong style="color: var(--verde-destaque); font-size: 1.1em; display: block; margin-bottom: 5px;">R$ ${p.preco.toFixed(2).replace('.',',')}</strong>
+                                        <strong style="color: var(--verde-destaque); font-size: 1.1em; display: block; margin-bottom: 5px;">R$ ${p.precoVista.toFixed(2).replace('.',',')}</strong>
                                         <a href="../produto/produto.html?nome=${encodeURIComponent(p.nome)}" style="font-size: 0.85em; color: var(--branco); background: var(--verde-principal); padding: 6px 12px; border-radius: 4px; text-decoration: none;">Detalhes</a>
                                     </div>
                                 </div>
@@ -525,8 +523,6 @@ window.aplicarSuperFiltro = function() {
     } 
     // Se não for "Peças", mostra os cartões normais!
     else {
-        containerPecas.style.display = 'none';
-        containerMaquinas.style.display = 'block';
 
         containerPecas.style.display = 'none';
         containerMaquinas.style.display = 'block';
