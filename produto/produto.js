@@ -49,7 +49,7 @@ async function carregarProduto() {
         const precoVista =
             precos.precoVista;
 
-        const precoParcelado =
+        let precoParcelado =
             precos.precoParcelado;
 
         const precoDe =
