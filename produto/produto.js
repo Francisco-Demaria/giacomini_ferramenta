@@ -11,129 +11,251 @@ async function carregarProduto() {
     const nomeProduto = parametros.get('nome');
 
     if (!nomeProduto) {
-        document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Produto não encontrado.</p>';
+        document.getElementById('detalhes-produto').innerHTML =
+            '<p class="mensagem-carregando">Produto não encontrado.</p>';
         return;
     }
 
     try {
-        const resposta = await fetch(URL_PLANILHA);
-        const dadosTexto = await resposta.text();
-        const linhas = dadosTexto.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
+        // Usa o sistema centralizado de produtos:
+        // planilha + cache
+        const produtos = await carregarProdutos();
 
-        let produtos = linhas.map(linha => {
-            // Expressão regular segura para não partir descrições que tenham vírgulas
-            const regexCSV = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
-            const col = linha.split(regexCSV);
-            
-            if (col.length < 4) return null; 
-            
-            return {
-                nome: col[0] ? col[0].trim().replace(/^"|"$/g, '') : '',
-                categoria: col[1] ? col[1].trim().replace(/^"|"$/g, '') : '',
-                subcategoria: col[2] ? col[2].trim().replace(/^"|"$/g, '') : '',
-                precoCusto: custo,        // Guardamos o custo original para calcular o parcelamento depois
-                preco: precoVenda,        // O 'preco' volta ao normal para os Recomendados lerem
-                precoAntigo: precoTabela, // O 'precoAntigo' volta para exibir o "De:" nos Recomendados
-                img: col[5] ? col[5].trim().replace(/^"|"$/g, '') : '',
-                estoque: parseInt(col[6]) || 0,
-                descricao: col[7] ? col[7].trim().replace(/^"|"$/g, '') : ''
-            };
-        }).filter(p => p !== null);
+        // Procura o produto pelo nome
+        const produto = produtos.find(
+            p => p.nome === nomeProduto
+        );
 
-        const produto = produtos.find(p => p.nome === nomeProduto);
+        // Verifica ANTES de tentar acessar o produto
+        if (!produto) {
+            document.getElementById('detalhes-produto').innerHTML =
+                '<p class="mensagem-carregando">Produto não encontrado ou sem estoque.</p>';
+            return;
+        }
 
-        const precos =
-            calcularPrecos(produto);
+        // Usa a mesma função de preços do restante do site
+        const precos = calcularPrecos(produto);
 
-        const precoVista =
-            precos.precoVista;
-
-        const precoParcelado =
-            precos.precoParcelado;
-
-        const precoDe =
-            precos.precoDe;
+        const precoVista = precos.precoVista;
+        const precoParcelado = precos.precoParcelado;
+        const precoDe = precos.precoDe;
 
         const valorParcela =
             (precoParcelado / 5)
                 .toFixed(2)
                 .replace('.', ',');
 
-        if (!produto) {
-            document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Produto não encontrado ou sem stock.</p>';
-            return;
-        }
-
         // ============================================
         // 2. LÓGICA DE IMAGEM
         // ============================================
-        const ehPeca = produto.categoria.toLowerCase().includes('peça') || produto.categoria.toLowerCase().includes('peca');
+
+        const ehPeca =
+            produto.categoria.toLowerCase().includes('peça') ||
+            produto.categoria.toLowerCase().includes('peca');
+
         const semImagem = produto.img === '';
-        
+
         let htmlImagem = '';
         let imgParaCarrinho = IMG_FALHA;
 
         if (!(ehPeca && semImagem)) {
             let imgProduto = produto.img;
-            if (imgProduto !== '' && !imgProduto.startsWith('http') && !imgProduto.startsWith('../img/')) {
+
+            if (
+                imgProduto !== '' &&
+                !imgProduto.startsWith('http') &&
+                !imgProduto.startsWith('../img/')
+            ) {
                 imgProduto = '../img/' + imgProduto;
             }
-            if (imgProduto === '') imgProduto = IMG_FALHA;
-            
+
+            if (imgProduto === '') {
+                imgProduto = IMG_FALHA;
+            }
+
             imgParaCarrinho = imgProduto;
 
             htmlImagem = `
                 <div class="imagem-detalhe-container" style="flex: 1; min-width: 300px;">
-                    <img src="${imgProduto}" alt="${produto.nome}" onerror="this.src='${IMG_FALHA}'" style="width: 100%; border-radius: 8px;">
+                    <img
+                        src="${imgProduto}"
+                        alt="${produto.nome}"
+                        onerror="this.src='${IMG_FALHA}'"
+                        style="width: 100%; border-radius: 8px;"
+                    >
                 </div>
             `;
         }
 
-        let txtSubcategoria = produto.subcategoria ? ` > ${produto.subcategoria}` : '';
+        let txtSubcategoria =
+            produto.subcategoria
+                ? ` > ${produto.subcategoria}`
+                : '';
 
         // ============================================
         // 3. RENDERIZAÇÃO DO HTML
         // ============================================
+
         document.getElementById('detalhes-produto').innerHTML = `
-            <div class="layout-detalhe-produto" style="display: flex; gap: 30px; flex-wrap: wrap; padding: 20px;">
+            <div
+                class="layout-detalhe-produto"
+                style="display: flex; gap: 30px; flex-wrap: wrap; padding: 20px;"
+            >
+
                 ${htmlImagem}
-                <div class="info-detalhe-container" style="flex: 1; min-width: 300px;">
-                    <span style="background: #eee; padding: 4px 10px; border-radius: 4px; font-size: 0.8em; text-transform: uppercase;">${produto.categoria}${txtSubcategoria}</span>
-                    <h2 style="margin-top: 15px; font-size: 2em;">${produto.nome}</h2>
-                    
-                    <div class="bloco-precos" style="margin: 20px 0; padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 10px;">
-                        <p style="text-decoration: line-through; color: #999; margin-bottom: 5px;">De: R$ ${produto.precoAntigo.toFixed(2).replace('.', ',')}</p>
-                        <p style="color: #666; font-size: 0.9em; margin-bottom: 5px;">Por apenas:</p>
-                        <div style="color: var(--verde-principal); font-size: 2.5em; font-weight: 900; line-height: 1;">
-                            R$ ${produto.preco.toFixed(2).replace('.', ',')}
-                            <small style="font-size: 0.4em; color: #666; display: block; font-weight: normal; margin-top: 5px;">À VISTA</small>
+
+                <div
+                    class="info-detalhe-container"
+                    style="flex: 1; min-width: 300px;"
+                >
+
+                    <span
+                        style="
+                            background: #eee;
+                            padding: 4px 10px;
+                            border-radius: 4px;
+                            font-size: 0.8em;
+                            text-transform: uppercase;
+                        "
+                    >
+                        ${produto.categoria}${txtSubcategoria}
+                    </span>
+
+                    <h2 style="margin-top: 15px; font-size: 2em;">
+                        ${produto.nome}
+                    </h2>
+
+                    <div
+                        class="bloco-precos"
+                        style="
+                            margin: 20px 0;
+                            padding: 20px;
+                            background: #fff;
+                            border: 1px solid #eee;
+                            border-radius: 10px;
+                        "
+                    >
+
+                        <p
+                            style="
+                                text-decoration: line-through;
+                                color: #999;
+                                margin-bottom: 5px;
+                            "
+                        >
+                            De: R$ ${precoDe.toFixed(2).replace('.', ',')}
+                        </p>
+
+                        <p
+                            style="
+                                color: #666;
+                                font-size: 0.9em;
+                                margin-bottom: 5px;
+                            "
+                        >
+                            Por apenas:
+                        </p>
+
+                        <div
+                            style="
+                                color: var(--verde-principal);
+                                font-size: 2.5em;
+                                font-weight: 900;
+                                line-height: 1;
+                            "
+                        >
+                            R$ ${precoVista.toFixed(2).replace('.', ',')}
+
+                            <small
+                                style="
+                                    font-size: 0.4em;
+                                    color: #666;
+                                    display: block;
+                                    font-weight: normal;
+                                    margin-top: 5px;
+                                "
+                            >
+                                À VISTA
+                            </small>
                         </div>
-                        
-                        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dotted #ccc;">
-                            <p style="font-size: 1.2em; color: #444;">Ou <strong>5x de R$ ${valorParcela}</strong> no cartão</p>
-                            <small style="color: #888;">(Total parcelado: R$ ${precoParcelado.toFixed(2).replace('.', ',')})</small>
+
+                        <div
+                            style="
+                                margin-top: 20px;
+                                padding-top: 15px;
+                                border-top: 1px dotted #ccc;
+                            "
+                        >
+                            <p
+                                style="
+                                    font-size: 1.2em;
+                                    color: #444;
+                                "
+                            >
+                                Ou
+                                <strong>
+                                    5x de R$ ${valorParcela}
+                                </strong>
+                                no cartão
+                            </p>
+
+                            <small style="color: #888;">
+                                (Total parcelado:
+                                R$ ${precoParcelado.toFixed(2).replace('.', ',')})
+                            </small>
                         </div>
+
                     </div>
 
-                    <p class="info-detalhe-descricao" style="line-height: 1.6; color: #555; margin-bottom: 20px;">${produto.descricao}</p>
-                    
-                    <button class="btn-adicionar-carrinho" 
-                            onclick="adicionarAoCarrinho('${produto.nome}', ${produto.preco}, '${imgParaCarrinho}')"
-                            style="width: 100%; padding: 18px; background: var(--verde-principal); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1.2em; cursor: pointer;">
-                        <i class="fas fa-shopping-cart"></i> ADICIONAR AO CARRINHO
+                    <p
+                        class="info-detalhe-descricao"
+                        style="
+                            line-height: 1.6;
+                            color: #555;
+                            margin-bottom: 20px;
+                        "
+                    >
+                        ${produto.descricao}
+                    </p>
+
+                    <button
+                        class="btn-adicionar-carrinho"
+                        onclick="adicionarAoCarrinho(
+                            '${produto.nome}',
+                            ${precoVista},
+                            '${imgParaCarrinho}'
+                        )"
+                        style="
+                            width: 100%;
+                            padding: 18px;
+                            background: var(--verde-principal);
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-weight: bold;
+                            font-size: 1.2em;
+                            cursor: pointer;
+                        "
+                    >
+                        <i class="fas fa-shopping-cart"></i>
+                        ADICIONAR AO CARRINHO
                     </button>
+
                 </div>
             </div>
         `;
 
-        // Agora a função de recomendados já não falha porque encontra o "p.preco" normal
+        // Produtos recomendados
         carregarRecomendados(produtos, produto);
 
     } catch (erro) {
         console.error("Erro ao carregar o produto:", erro);
-        document.getElementById('detalhes-produto').innerHTML = '<p class="mensagem-carregando">Erro ao carregar os detalhes do produto.</p>';
+
+        document.getElementById('detalhes-produto').innerHTML =
+            '<p class="mensagem-carregando">Erro ao carregar os detalhes do produto.</p>';
     }
 }
+
 function carregarRecomendados(todosProdutos, produtoAtual) {
     const container = document.getElementById('grid-recomendados');
     if (!container) return;
