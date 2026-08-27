@@ -126,5 +126,17 @@ async function carregarProdutos() {
         })
     );
 
-    return produtos;
+    function processarProdutos(produtos) {
+        return produtos.map(produto => {
+            const precos = calcularPrecos(produto);
+
+            return {
+                ...produto,
+                precoDe: precos.precoDe,
+                precoVista: precos.precoVista,
+                precoParcelado: precos.precoParcelado,
+                possuiPrecoEspecial: precos.possuiPrecoEspecial
+            };
+        });
+    }
 }
