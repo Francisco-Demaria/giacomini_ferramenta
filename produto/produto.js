@@ -21,6 +21,10 @@ async function carregarProduto() {
         // planilha + cache
         const produtos = await carregarProdutos();
 
+        if (!Array.isArray(produtos)) {
+            throw new Error('carregarProdutos() não retornou uma lista de produtos.');
+        }
+
         // Procura o produto pelo nome
         const produto = produtos.find(
             p => p.nome === nomeProduto
