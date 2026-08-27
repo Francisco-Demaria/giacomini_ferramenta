@@ -49,7 +49,7 @@ async function carregarProduto() {
         const precoVista =
             precos.precoVista;
 
-        let precoParcelado =
+        const precoParcelado =
             precos.precoParcelado;
 
         const precoDe =
@@ -68,7 +68,6 @@ async function carregarProduto() {
         // ============================================
         // 1. CÁLCULO DO PARCELAMENTO (PRODUTO PRINCIPAL)
         // ============================================
-        let precoParcelado = Math.floor(produto.precoCusto * 1.45) + 0.99;
         let valorParcela = (precoParcelado / 5).toFixed(2).replace('.', ',');
 
         // ============================================
