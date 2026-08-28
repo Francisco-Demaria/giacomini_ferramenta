@@ -97,7 +97,7 @@ function criarCartao(p) {
 
     return `
         <a href="../produto/produto.html?nome=${encodeURIComponent(p.nome)}"
-           style="text-decoration:none; color:inherit;">
+           class="link-produto">
 
             <div class="cartao-produto">
 
@@ -116,72 +116,38 @@ function criarCartao(p) {
 
                 <div
                     class="precos-container"
-                    style="margin-top: auto; text-align: center;"
                 >
 
-                    <div
-                        style="
-                            text-decoration: line-through;
-                            color: #999;
-                            font-size: 0.85em;
-                        "
-                    >
+                    <div class="preco-tabela">
                         De:
                         R$
                         ${precoTabela.toFixed(2).replace('.', ',')}
                     </div>
 
-                    <div
-                        style="
-                            color: #666;
-                            font-size: 0.85em;
-                        "
-                    >
+                    <div class="texto-por-apenas">
                         Por apenas
                     </div>
 
-                    <div
-                        style="
-                            color: var(--verde-principal);
-                            font-weight: 900;
-                            font-size: 1.4em;
-                            margin-bottom: 5px;
-                        "
-                    >
+                    <div class="peco-vista">
                         R$
                         ${precoAVista.toFixed(2).replace('.', ',')}
 
-                        <small style="font-size:0.5em">
+                        <small class="preco-vista-label">
                             à vista
                         </small>
                     </div>
 
-                    <div
-                        style="
-                            color: #444;
-                            font-size: 0.9em;
-                            font-weight: bold;
-                        "
-                    >
+                    <div class="preco-parcelado">
                         ou 5x de R$ ${valorParcela}
                     </div>
 
-                    <div
-                        style="
-                            color: #888;
-                            font-size: 0.75em;
-                            margin-bottom: 15px;
-                        "
-                    >
+                    <div class="info-parcelamento">
                         (R$
                         ${precoParcelado.toFixed(2).replace('.', ',')}
                         no cartão)
                     </div>
 
-                    <button
-                        class="btn-comprar"
-                        style="width: 100%;"
-                    >
+                    <button class="btn-comprar">
                         Ver Detalhes
                     </button>
 

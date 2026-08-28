@@ -168,3 +168,51 @@ header { background: var(--verde-principal); padding: 12px 5%; display: flex; ju
     padding: 50px 20px;
     color: #666;
 }
+
+/* =========================================================
+   PREÇOS DOS CARDS
+   ========================================================= */
+
+.link-produto {
+    text-decoration: none;
+    color: inherit;
+}
+
+.precos-container {
+    margin-top: auto;
+    text-align: center;
+}
+
+.preco-tabela {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 0.85em;
+}
+
+.texto-por-apenas {
+    color: #666;
+    font-size: 0.85em;
+}
+
+.preco-vista {
+    color: var(--verde-principal);
+    font-weight: 900;
+    font-size: 1.4em;
+    margin-bottom: 5px;
+}
+
+.preco-vista-label {
+    font-size: 0.5em;
+}
+
+.preco-parcelado {
+    color: #444;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.info-parcelamento {
+    color: #888;
+    font-size: 0.75em;
+    margin-bottom: 15px;
+}
