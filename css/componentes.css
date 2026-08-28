@@ -1,0 +1,309 @@
+/* =========================================================
+   COMPONENTES COMPARTILHADOS
+   ========================================================= */
+
+
+/* =========================================================
+   GRID DE PRODUTOS
+   ========================================================= */
+
+.grid-produtos {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
+
+    gap: 30px;
+
+    text-align: left;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   CARD DE PRODUTO
+   ========================================================= */
+
+.cartao-produto {
+    background: white;
+
+    border: 1px solid var(--borda);
+
+    padding: 25px;
+
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+
+    transition: 0.3s;
+
+    height: 100%;
+}
+
+.cartao-produto:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+    border-color: var(--verde-principal);
+
+    transform: translateY(-5px);
+}
+
+.cartao-produto img {
+    width: 100%;
+
+    height: 220px;
+
+    object-fit: contain;
+
+    margin-bottom: 20px;
+
+    transition: 0.3s;
+}
+
+.cartao-produto:hover img {
+    transform: scale(1.05);
+}
+
+.cartao-produto h3 {
+    font-size: 1.1em;
+
+    color: var(--grafite);
+
+    margin-bottom: 10px;
+
+    line-height: 1.4;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SELO
+   ========================================================= */
+
+.selo-desconto {
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    background: #e74c3c;
+
+    color: white;
+
+    padding: 6px 12px;
+
+    font-size: 0.85em;
+
+    font-weight: 900;
+
+    border-radius: 3px;
+
+    z-index: 5;
+}
+
+
+/* =========================================================
+   BOTÃO COMPRAR
+   ========================================================= */
+
+.btn-comprar {
+    background: var(--verde-principal);
+
+    color: white;
+
+    text-decoration: none;
+
+    padding: 15px;
+
+    font-weight: bold;
+
+    text-transform: uppercase;
+
+    border-radius: 4px;
+
+    text-align: center;
+
+    display: block;
+
+    width: 100%;
+
+    border: none;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.btn-comprar:hover {
+    background: var(--verde-destaque);
+}
+
+
+/* =========================================================
+   LINK DO PRODUTO
+   ========================================================= */
+
+.link-produto {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* =========================================================
+   PREÇOS DOS CARDS
+   ========================================================= */
+
+.precos-container {
+    margin-top: auto;
+    text-align: center;
+}
+
+.preco-tabela {
+    text-decoration: line-through;
+
+    color: #999;
+
+    font-size: 0.85em;
+}
+
+.texto-por-apenas {
+    color: #666;
+
+    font-size: 0.85em;
+}
+
+.preco-vista {
+    color: var(--verde-principal);
+
+    font-weight: 900;
+
+    font-size: 1.4em;
+
+    margin-bottom: 5px;
+}
+
+.preco-vista-label {
+    font-size: 0.5em;
+}
+
+.preco-parcelado {
+    color: #444;
+
+    font-size: 0.9em;
+
+    font-weight: bold;
+}
+
+.info-parcelamento {
+    color: #888;
+
+    font-size: 0.75em;
+
+    margin-bottom: 15px;
+}
+
+
+/* =========================================================
+   CARDS DE RECOMENDADOS
+   ========================================================= */
+
+.grid-recomendados {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(250px, 1fr));
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   PREÇOS ANTIGOS / ATUAIS
+   ========================================================= */
+
+.preco-antigo {
+    text-decoration: line-through;
+
+    color: #999;
+
+    font-size: 0.95em;
+
+    min-height: 1.2em;
+}
+
+.preco-atual {
+    color: var(--verde-principal);
+
+    font-size: 2em;
+
+    font-weight: 900;
+
+    margin-bottom: 20px;
+
+    margin-top: auto;
+}
+
+
+/* =========================================================
+   MENSAGENS
+   ========================================================= */
+
+.mensagem-vazia {
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    padding: 50px 20px;
+
+    color: #666;
+}
+
+.mensagem-produtos {
+    text-align: center;
+
+    width: 100%;
+
+    color: #666;
+}
+
+
+/* =========================================================
+   BOTÕES SECUNDÁRIOS
+   ========================================================= */
+
+.btn-secundario {
+    background: var(--verde-principal);
+
+    color: white;
+
+    padding: 15px 35px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    border-radius: 4px;
+
+    display: inline-block;
+
+    margin-top: 30px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    transition: 0.3s;
+}
+
+.btn-secundario:hover {
+    background: var(--verde-destaque);
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

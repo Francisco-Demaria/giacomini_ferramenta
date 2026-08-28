@@ -1,4 +1,4 @@
-const IMG_FALHA = '../favicon.ico';
+const IMG_FALHA = '../images.jfif';
 
 function atualizarContador() {
     let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giacomini | Ferramentas e Manutenção</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/componentes.css">
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -13,7 +15,7 @@
 
     <header>
         <button class="btn-menu" onclick="abrirMenu()">
-            <i class="fas fa-bars" style="font-size: 1.5em;"></i> Menu
+            <i class="fas fa-bars icone-menu"></i> Menu
         </button>
         <a href="index.html" class="logo-container">
             <img src="favicon.ico" class="logo-img" alt="Giacomini" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Logo';">
@@ -39,14 +41,14 @@
         
         <div class="slider-wrapper" id="slider-wrapper">
             
-            <div class="slide" style="background-image: url('img/img_3.jpg');">
+            <div class="slide slide-1">
                 <div class="camada-verde-slide"></div> <div class="conteudo-slide"> <h1>O Motor do Seu Negócio</h1>
                     <p>Peças originais e máquinas de alta precisão para profissionais exigentes.</p>
                     <a href="catalogo/catalogo.html" class="btn-hero">Ver Catálogo</a>
                 </div>
             </div>
             
-            <div class="slide" style="background-image: url('img/img_2.jpg');">
+            <div class="slide slide-2">
                 <div class="camada-verde-slide"></div>
                 <div class="conteudo-slide">
                     <h1>Tradição & Confiança</h1>
@@ -55,7 +57,7 @@
                 </div>
             </div>
             
-            <div class="slide" style="background-image: url('img/img_1.jpg');">
+            <div class="slide slide-3">
                 <div class="camada-verde-slide"></div>
                 <div class="conteudo-slide">
                     <h1>Ofertas Imperdíveis</h1>
@@ -83,7 +85,7 @@
     <section class="secao">
         <h2 class="titulo-secao">Produtos em Destaque</h2>
         <div class="grid-produtos" id="grid-destaques">
-            <p style="text-align:center; width:100%; color:#666;">Conectando ao banco de dados...</p>
+            <p class="mensagem-produtos">Conectando ao banco de dados...</p>
         </div>
         <br><br>
         <a href="catalogo/catalogo.html" class="btn-secundario"><i class="fas fa-th-list"></i> Ver Catálogo Completo</a>
@@ -101,7 +103,7 @@
     <section class="secao" id="lancamentos">
         <h2 class="titulo-secao">Lançamentos & Novidades</h2>
         <div class="grid-produtos" id="grid-lancamentos">
-            <p style="text-align:center; width:100%; color:#666;">Buscando novidades...</p>
+            <p class="mensagem-produtos">Buscando novidades...</p>
         </div>
     </section>
 
@@ -135,7 +137,7 @@
     <section class="secao" id="promocoes">
         <h2 class="titulo-secao">Ofertas Especiais</h2>
         <div class="grid-produtos" id="grid-promocoes">
-            <p style="text-align:center; width:100%; color:#666;">Verificando promoções ativas...</p>
+            <p class="mensagem-produtos">Verificando promoções ativas...</p>
         </div>
     </section>
 
@@ -147,19 +149,19 @@
         <h3>Giacomini Ferramentas</h3>
         <p>Soluções Industriais e Profissionais de Alta Performance - Joinville/SC</p>
         
-        <p style="font-size: 0.9em; margin-top: 10px;">
+        <p class="contato-rodape">
             <i class="fas fa-phone"></i> (47) 3804-4048 | 
             <i class="fab fa-whatsapp"></i> (47) 98905-0263 | 
             <i class="fas fa-envelope"></i> giacomini.adm@outlook.com
         </p>
 
-        <div class="social-links" style="margin-top: 15px;">
+        <div class="social-links rodape-social">
             <a href="https://wa.me/5547989050263" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.instagram.com/giacominimanutencao/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
             <a href="https://www.facebook.com/giacominimanutencao/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
         </div>
 
-        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8em; opacity: 0.7;">
+        <div class="creditos-rodape">
             <p>Desenvolvido por: <strong>Francisco | demariafranciscodemelo@gmail.com</strong></p>
         </div>
     </footer>

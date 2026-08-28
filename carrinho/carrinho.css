@@ -1,59 +1,315 @@
-:root { 
-    --verde-principal: #166e36; 
-    --verde-destaque: #1ebe5d; 
-    --grafite: #333333; 
-    --fundo: #f4f7f6; 
-    --borda: #e5e5e5; 
-    --branco: #FFFFFF;
+/* =========================================================
+   CARRINHO
+   ========================================================= */
+
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.container {
+    max-width: 900px;
+
+    margin: 50px auto;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-body { background-color: var(--fundo); color: var(--grafite); }
 
-header { background: var(--verde-principal); padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000;}
-.logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; margin: 0 auto;}
-.logo-img { height: 45px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.7); background: white; padding: 2px; }
-.logo-texto { color: white; font-size: 1.5em; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+/* =========================================================
+   TOPO
+   ========================================================= */
 
-/* --- O SEU MENU PROFISSIONAL --- */
-.gaveta { position: fixed; top: 0; height: 100vh; width: 320px; background: var(--branco); box-shadow: 5px 0 25px rgba(0,0,0,0.2); z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px 20px; display: flex; flex-direction: column; left: -340px;}
-.gaveta.aberto { left: 0; }
-.gaveta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--fundo); padding-bottom: 15px;}
-.gaveta-header h2 { color: var(--verde-principal); font-weight: 800; text-transform: uppercase; }
-.btn-fechar-menu { background: var(--fundo); color: var(--grafite); border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px; font-weight: bold; transition: 0.3s;}
-.btn-fechar-menu:hover { background: #e74c3c; color: white; }
-.menu-links { display: flex; flex-direction: column; gap: 5px; flex: 1; }
-.menu-links a { text-decoration: none; color: var(--grafite); font-size: 1em; padding: 15px; border-radius: 4px; display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s;}
-.menu-links a:hover { background: #e8f5e9; color: var(--verde-principal); border-left: 4px solid var(--verde-principal);}
-#overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 1500; }
+.topo-carrinho {
+    display: flex;
 
-/* Para arrumar o botão de abrir que estava preto: */
-.btn-menu { background: transparent; color: white; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 1.1em; font-weight: bold; }
+    align-items: center;
 
-.menu-lateral a:hover { background: var(--fundo); color: var(--verde-principal); }
-.container { max-width: 900px; margin: 50px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-.topo-carrinho { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--borda); padding-bottom: 20px; margin-bottom: 30px;}
-.btn-voltar { display: inline-flex; align-items: center; gap: 10px; background: white; color: var(--grafite); text-decoration: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; border: 1px solid var(--borda); transition: 0.3s; text-transform: uppercase; font-size: 0.9em;}
-.btn-voltar:hover { background: var(--fundo); border-color: var(--verde-principal); color: var(--verde-principal); }
-h1 { color: var(--verde-principal); font-size: 2em; text-transform: uppercase; font-weight: 900;}
+    justify-content: space-between;
 
-.item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--borda); gap: 20px;}
-.info-produto-cart { display: flex; align-items: center; gap: 20px; flex: 1;}
-.img-cart { width: 80px; height: 80px; object-fit: contain; border: 1px solid #eee; border-radius: 4px; padding: 5px;}
-.item-info h3 { margin: 0; font-size: 1.2em; color: var(--grafite); line-height: 1.4;}
-.item-preco { font-weight: 900; color: var(--verde-principal); font-size: 1.5em; white-space: nowrap;}
+    border-bottom: 2px solid var(--borda);
 
-.btn-remover { background: white; color: #e74c3c; border: 1px solid #e74c3c; padding: 10px; border-radius: 4px; cursor: pointer; transition: 0.3s; font-size: 1.2em;}
-.btn-remover:hover { background: #e74c3c; color: white; }
+    padding-bottom: 20px;
 
-.area-total { background: var(--fundo); padding: 30px; border-radius: 8px; margin-top: 40px; text-align: right;}
-.total-texto { font-size: 1.2em; color: #666; margin-bottom: 10px; text-transform: uppercase;}
-.total-valor { font-size: 2.8em; font-weight: 900; color: var(--verde-principal); }
+    margin-bottom: 30px;
+}
 
-.btn-whatsapp { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; background: #25D366; color: white; padding: 20px; font-size: 1.3em; font-weight: 900; text-decoration: none; border-radius: 4px; margin-top: 30px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;}
-.btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);}
-.carrinho-vazio { text-align: center; padding: 50px 0; font-size: 1.2em; color: #888;}
+.topo-carrinho h1 {
+    color: var(--verde-principal);
 
-.btn-zap-flutuante { position: fixed; bottom: 30px; right: 30px; background: #25D366; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4); z-index: 999; transition: 0.3s; text-decoration: none;}
-.btn-zap-flutuante:hover { transform: scale(1.1); background: #1ebe5d; }
-.btn-zap-flutuante i { color: white; font-size: 2.2em; }
+    font-size: 2em;
+
+    text-transform: uppercase;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   BOTÃO VOLTAR
+   ========================================================= */
+
+.btn-voltar {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    background: white;
+
+    color: var(--grafite);
+
+    text-decoration: none;
+
+    padding: 10px 20px;
+
+    border-radius: 4px;
+
+    font-weight: bold;
+
+    border: 1px solid var(--borda);
+
+    transition: 0.3s;
+
+    text-transform: uppercase;
+
+    font-size: 0.9em;
+}
+
+.btn-voltar:hover {
+    background: var(--fundo);
+
+    border-color: var(--verde-principal);
+
+    color: var(--verde-principal);
+}
+
+
+/* =========================================================
+   ITENS
+   ========================================================= */
+
+.item-carrinho {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px 0;
+
+    border-bottom: 1px solid var(--borda);
+
+    gap: 20px;
+}
+
+.info-produto-cart {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    flex: 1;
+}
+
+.img-cart {
+    width: 80px;
+    height: 80px;
+
+    object-fit: contain;
+
+    border: 1px solid #eee;
+
+    border-radius: 4px;
+
+    padding: 5px;
+}
+
+.item-info h3 {
+    margin: 0;
+
+    font-size: 1.2em;
+
+    color: var(--grafite);
+
+    line-height: 1.4;
+}
+
+.item-preco {
+    font-weight: 900;
+
+    color: var(--verde-principal);
+
+    font-size: 1.5em;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   REMOVER
+   ========================================================= */
+
+.btn-remover {
+    background: white;
+
+    color: #e74c3c;
+
+    border: 1px solid #e74c3c;
+
+    padding: 10px;
+
+    border-radius: 4px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+    font-size: 1.2em;
+}
+
+.btn-remover:hover {
+    background: #e74c3c;
+
+    color: white;
+}
+
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+.area-total {
+    background: var(--fundo);
+
+    padding: 30px;
+
+    border-radius: 8px;
+
+    margin-top: 40px;
+
+    text-align: right;
+}
+
+.total-texto {
+    font-size: 1.2em;
+
+    color: #666;
+
+    margin-bottom: 10px;
+
+    text-transform: uppercase;
+}
+
+.total-valor {
+    font-size: 2.8em;
+
+    font-weight: 900;
+
+    color: var(--verde-principal);
+}
+
+
+/* =========================================================
+   WHATSAPP
+   ========================================================= */
+
+.btn-whatsapp {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    width: 100%;
+
+    background: #25D366;
+
+    color: white;
+
+    padding: 20px;
+
+    font-size: 1.3em;
+
+    font-weight: 900;
+
+    text-decoration: none;
+
+    border-radius: 4px;
+
+    margin-top: 30px;
+
+    transition: 0.3s;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+.btn-whatsapp:hover {
+    background: #1ebe5d;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 5px 15px rgba(37, 211, 102, 0.4);
+}
+
+
+/* =========================================================
+   CARRINHO VAZIO
+   ========================================================= */
+
+.carrinho-vazio {
+    text-align: center;
+
+    padding: 50px 0;
+
+    font-size: 1.2em;
+
+    color: #888;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .container {
+        margin: 25px 15px;
+
+        padding: 25px;
+    }
+
+    .topo-carrinho {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .item-carrinho {
+        flex-wrap: wrap;
+    }
+
+    .info-produto-cart {
+        min-width: 100%;
+    }
+
+    .item-preco {
+        font-size: 1.3em;
+    }
+}

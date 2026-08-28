@@ -280,13 +280,7 @@ if (containerMaquinas) {
                                 <span>
                                     ⚙️ ${subcat}
 
-                                    <span
-                                        style="
-                                            font-size:0.8em;
-                                            font-weight:normal;
-                                            color:#666;
-                                        "
-                                    >
+                                    <span class="info-subcategoria">
                                         (${grupos[subcat].length} itens)
                                     </span>
                                 </span>
@@ -305,22 +299,13 @@ if (containerMaquinas) {
 
                                         <div>
 
-                                            <strong
-                                                style="
-                                                    font-size:1.1em;
-                                                "
-                                            >
+                                            <strong class="nome-peca">
                                                 ${p.nome}
                                             </strong>
 
                                             <br>
 
-                                            <span
-                                                style="
-                                                    color:#666;
-                                                    font-size:0.9em;
-                                                "
-                                            >
+                                            <span class="descricao-peca">
                                                 Estoque:
                                                 ${p.estoque}
                                                 |
@@ -329,22 +314,9 @@ if (containerMaquinas) {
 
                                         </div>
 
-                                        <div
-                                            class="direita"
-                                            style="
-                                                text-align:right;
-                                                min-width:120px;
-                                            "
-                                        >
+                                        <div class="direita">
 
-                                            <strong
-                                                style="
-                                                    color:var(--verde-destaque);
-                                                    display:block;
-                                                    margin-bottom:8px;
-                                                    font-size:1.2em;
-                                                "
-                                            >
+                                            <strong class="preco-peca">
                                                 R$
                                                 ${p.precoVista
                                                     .toFixed(2)
@@ -353,14 +325,7 @@ if (containerMaquinas) {
 
                                             <a
                                                 href="../produto/produto.html?nome=${encodeURIComponent(p.nome)}"
-                                                class="btn-comprar"
-                                                style="
-                                                    padding:8px 15px;
-                                                    font-size:0.9em;
-                                                    text-decoration:none;
-                                                    display:inline-block;
-                                                "
-                                            >
+                                                class="btn-comprar btn-detalhes-peca">
                                                 Ver Detalhes
                                             </a>
 
@@ -442,8 +407,13 @@ window.aplicarSuperFiltro = function() {
     });
 
     // 4. Ordenação
-    if (ordem === 'menor-preco') filtrados.sort((a, b) => a.preco - b.preco);
-    else if (ordem === 'maior-preco') filtrados.sort((a, b) => b.preco - a.preco);
+    if (ordem === 'menor-preco') {
+        filtrados.sort((a, b) => a.precoVista - b.precoVista);
+    }
+
+    else if (ordem === 'maior-preco') {
+        filtrados.sort((a, b) => b.precoVista - a.precoVista);
+    }
 
     const containerMaquinas = document.getElementById('sessao-maquinas');
     const containerGrid = document.getElementById('lista-maquinas');
@@ -455,23 +425,27 @@ window.aplicarSuperFiltro = function() {
         containerPecas.style.display = 'block';
 
         if (filtrados.length === 0) {
-            containerPecas.innerHTML = '<p style="padding: 40px; text-align: center; color: #666;">Nenhuma peça encontrada.</p>';
+            containerPecas.innerHTML = `
+                <p class="mensagem-nenhuma-peca">
+                    Nenhuma peça encontrada.
+                </p>
+            `;
         } else {
             let subcats = [...new Set(filtrados.map(p => p.subcategoria))];
             
             let htmlSanfona = subcats.map((sub, index) => {
                 let pecasDaSub = filtrados.filter(p => p.subcategoria === sub);
                 return `
-                    <div style="margin-bottom: 12px; border: 1px solid var(--borda); border-radius: 6px; overflow: hidden; background: #fff;">
-                        <button onclick="abrirSanfona('sanfona-${index}')" style="width: 100%; background: #fff; padding: 18px; border: none; text-align: left; font-size: 1.1em; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--grafite);">
+                    <div class="grupo-sanfona">
+                        <button onclick="abrirSanfona('sanfona-${index}')" class="btn-sanfona">
                             ${sub || 'Outras Peças'} <i class="fas fa-chevron-down"></i>
                         </button>
-                        <div id="sanfona-${index}" style="max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out; background: #f9f9f9; padding: 0 15px;">
+                        <div id="sanfona-${index}" class="conteudo-sanfona">
                             ${pecasDaSub.map(p => `
-                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee;">
+                                <div class="linha-peca">
                                     <div>
-                                        <strong style="color: var(--grafite); font-size: 1.05em;">${p.nome}</strong><br>
-                                        <span style="font-size:0.85em; color:#777;">Estoque: ${p.estoque} | ${p.descricao}</span>
+                                        <strong class="nome-peca-sanfona">${p.nome}</strong><br>
+                                        <span class="info-peca-sanfona">Estoque: ${p.estoque} | ${p.descricao}</span>
                                     </div>
                                     <div style="text-align: right; min-width: 100px;">
                                         <strong style="color: var(--verde-destaque); font-size: 1.1em; display: block; margin-bottom: 5px;">R$ ${p.precoVista.toFixed(2).replace('.',',')}</strong>
