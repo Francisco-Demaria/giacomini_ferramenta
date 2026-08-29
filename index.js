@@ -1,9 +1,3 @@
-function atualizarContador() {
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-    let contador = document.getElementById('contador-carrinho');
-    if(contador) contador.innerText = carrinho.length;
-}
-
 function fazerBusca() {
     let termo = document.getElementById('input-busca').value;
     // Removido o ../ pois o index já está na raiz
@@ -137,9 +131,6 @@ function criarCartao(p) {
         </a>
     `;
 }
-
-function abrirMenu() { document.getElementById('menu-lateral').classList.add('aberto'); document.getElementById('overlay').style.display = 'block'; }
-function fecharMenu() { document.getElementById('menu-lateral').classList.remove('aberto'); document.getElementById('overlay').style.display = 'none'; }
 
 // --- CARROSSEL INFINITO E AUTOMÁTICO ---
 const wrapper = document.getElementById('slider-wrapper');

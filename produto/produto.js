@@ -1,11 +1,5 @@
 const IMG_FALHA = '../images.jfif';
 
-function atualizarContador() {
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-    let contador = document.getElementById('contador-carrinho');
-    if(contador) contador.innerText = carrinho.length;
-}
-
 async function carregarProduto() {
     const parametros = new URLSearchParams(window.location.search);
     const nomeProduto = parametros.get('nome');
@@ -322,9 +316,5 @@ function adicionarAoCarrinho(nome, preco, img) {
     atualizarContador();
     alert(`${nome} adicionado ao carrinho!`);
 }
-
-function abrirMenu() { document.getElementById('menu-lateral').classList.add('aberto'); document.getElementById('overlay').style.display = 'block'; }
-function fecharMenu() { document.getElementById('menu-lateral').classList.remove('aberto'); document.getElementById('overlay').style.display = 'none'; }
-
 
 window.onload = () => { carregarProduto(); atualizarContador(); };

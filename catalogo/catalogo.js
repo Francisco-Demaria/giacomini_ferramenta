@@ -45,11 +45,6 @@ function renderizarMaisProdutos() {
     }
 }
 
-function atualizarContador() {
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-    let contador = document.getElementById('contador-carrinho');
-    if(contador) contador.innerText = carrinho.length;
-}
 
 function fazerBusca() {
     let termo = document.getElementById('input-busca').value;
@@ -497,10 +492,6 @@ window.abrirSanfona = function(id) {
         elemento.style.paddingBottom = '15px';
     }
 };
-
-function abrirMenu() { document.getElementById('menu-lateral').classList.add('aberto'); document.getElementById('overlay').style.display = 'block'; }
-function fecharMenu() { document.getElementById('menu-lateral').classList.remove('aberto'); document.getElementById('overlay').style.display = 'none'; }
-
 
 const observer = new IntersectionObserver((entries) => {
 
