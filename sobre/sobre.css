@@ -2,165 +2,43 @@
    SOBRE
    ========================================================= */
 
+.sobre-container {
+    width: min(100% - 40px, 1000px);
+    margin: 50px auto;
+}
 
-/* =========================================================
-   BANNER
-   ========================================================= */
-
-.banner-sobre {
-    background:
-        linear-gradient(
-            rgba(14, 71, 34, 0.9),
-            rgba(22, 110, 54, 0.9)
-        ),
-        url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDM5MTUiIGZpbGwtb3BhY2l0eT0iMC4yMiI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTIwIDIwaDIwdjIwSDIWMjB6TTAgMjBoMjB2MjBIMFYyMHoyMCAwaDIwdjIwSDIwVjB6Ii8+PC9nPjwvZz48L3N2Zz4=');
-
-    padding: 80px 20px;
-
+.sobre-container h1 {
+    color: var(--verde-principal);
     text-align: center;
-
-    color: white;
-
-    border-bottom: 5px solid var(--verde-principal);
+    margin-bottom: 30px;
 }
 
-.banner-sobre h1 {
-    font-size: 3.5em;
-
-    font-weight: 900;
-
-    text-transform: uppercase;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 20px;
-
-    text-shadow:
-        2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.banner-sobre p {
-    font-size: 1.3em;
-
-    max-width: 700px;
-
-    margin: 0 auto;
-
-    opacity: 0.9;
-}
-
-
-/* =========================================================
-   CONTAINER
-   ========================================================= */
-
-.container {
-    max-width: 900px;
-
-    margin: 60px auto;
-
-    background: white;
-
-    padding: 60px;
-
-    border-radius: 8px;
-
-    box-shadow:
-        0 5px 25px rgba(0, 0, 0, 0.05);
-}
-
-
-/* =========================================================
-   VOLTAR
-   ========================================================= */
-
-.btn-voltar {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    background: white;
-
-    color: var(--grafite);
-
-    text-decoration: none;
-
-    padding: 10px 20px;
-
-    border-radius: 4px;
-
-    font-weight: bold;
-
-    border: 1px solid var(--borda);
-
-    transition: 0.3s;
-
-    text-transform: uppercase;
-
-    font-size: 0.9em;
-
-    margin-bottom: 40px;
-}
-
-.btn-voltar:hover {
-    background: var(--fundo);
-
-    border-color: var(--verde-principal);
-
-    color: var(--verde-principal);
-}
-
-
-/* =========================================================
-   HISTÓRIA
-   ========================================================= */
-
-.texto-historia h2 {
-    color: var(--verde-principal);
-
-    font-size: 2em;
-
-    margin-bottom: 20px;
-
-    border-left: 5px solid var(--verde-principal);
-
-    padding-left: 15px;
-}
-
-.texto-historia p {
-    font-size: 1.2em;
-
-    line-height: 1.8;
-
+.sobre-container section {
+    background: var(--branco);
+    padding: 30px;
     margin-bottom: 25px;
 
-    color: #555;
+    border-radius: var(--raio);
+    box-shadow: var(--sombra);
 }
 
+.sobre-container h2 {
+    color: var(--verde-principal);
+    margin-bottom: 15px;
+}
 
-/* =========================================================
-   RESPONSIVIDADE
-   ========================================================= */
+.sobre-container p {
+    color: var(--cinza-escuro);
+    line-height: 1.7;
+}
 
-@media (max-width: 768px) {
-
-    .banner-sobre {
-        padding: 60px 20px;
+@media (max-width: 600px) {
+    .sobre-container {
+        width: calc(100% - 20px);
+        margin: 30px auto;
     }
 
-    .banner-sobre h1 {
-        font-size: 2.5em;
-    }
-
-    .banner-sobre p {
-        font-size: 1.1em;
-    }
-
-    .container {
-        margin: 30px 15px;
-
-        padding: 30px;
+    .sobre-container section {
+        padding: 20px;
     }
 }

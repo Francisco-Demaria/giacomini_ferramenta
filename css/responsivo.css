@@ -1,0 +1,92 @@
+/* =========================================================
+   RESPONSIVIDADE GLOBAL
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .logo-texto {
+        font-size: 1.2em;
+    }
+
+    .layout-catalogo {
+        flex-direction: column;
+    }
+
+    .menu-lateral-filtros {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    header {
+        padding: 10px 4%;
+    }
+
+    .logo-img {
+        height: 40px;
+    }
+
+    .logo-texto {
+        font-size: 1.1em;
+    }
+
+    .gaveta {
+        width: min(320px, 85vw);
+    }
+
+    .faixa-pesquisa {
+        padding: 12px 4%;
+    }
+
+    .box-pesquisa input {
+        padding: 12px 15px;
+        font-size: 0.95em;
+    }
+
+    .box-pesquisa button {
+        padding: 0 20px;
+    }
+
+    .btn-zap-flutuante {
+        width: 55px;
+        height: 55px;
+
+        right: 20px;
+        bottom: 20px;
+    }
+
+    .btn-zap-flutuante i {
+        font-size: 1.8em;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .logo-texto {
+        display: none;
+    }
+
+    .btn-menu {
+        font-size: 0.9em;
+    }
+
+    .icone-carrinho-topo {
+        font-size: 1.2em;
+    }
+
+    footer {
+        padding: 50px 15px 30px;
+    }
+
+    footer h3 {
+        font-size: 1.4em;
+    }
+
+    .social-links {
+        gap: 12px;
+    }
+
+}
