@@ -33,6 +33,8 @@
         <p>Conheça a história da empresa que mantém a indústria e a construção civil de Joinville girando todos os dias.</p>
     </div>
 
+    <div id="overlay" onclick="fecharMenu()"></div>
+
     <nav id="menu-lateral" class="gaveta">
         <div class="gaveta-header">
             <h2>Navegação</h2>
@@ -88,10 +90,7 @@
     </div>
 </footer>
 
-<script>
-    function abrirMenu() { document.getElementById('menu-lateral').classList.add('aberto'); document.getElementById('overlay').style.display = 'block'; }
-    function fecharMenu() { document.getElementById('menu-lateral').classList.remove('aberto'); document.getElementById('overlay').style.display = 'none'; }
-</script>
+    <script src="../js/shared/menu.js"></script>
 
 </body>
 </html>
