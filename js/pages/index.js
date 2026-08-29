@@ -1,44 +1,118 @@
-function fazerBusca() {
-    let termo = document.getElementById('input-busca').value;
-    // Removido o ../ pois o index já está na raiz
-    if(termo.trim() !== '') window.location.href = 'catalogo/catalogo.html?busca=' + encodeURIComponent(termo);
+// =========================================================
+// HOME — GIACOMINI FERRAMENTAS
+// =========================================================
+
+// =========================================================
+// CARROSSEL PRINCIPAL
+// =========================================================
+
+const wrapper = document.getElementById('slider-wrapper');
+
+let podeClicar = true;
+let timerAutomatico = null;
+
+function iniciarAutomatico() {
+    if (!wrapper) return;
+
+    clearInterval(timerAutomatico);
+
+    timerAutomatico = setInterval(() => {
+        mudarSlide(1);
+    }, 5000);
 }
 
-function criarCartao(p) {
-    let img = p.img;
+function mudarSlide(direcao) {
+    if (!wrapper || !podeClicar) return;
 
-    if (img !== '' && !img.startsWith('http') && !img.startsWith('img/')) {
-        img = 'img/' + img;
+    podeClicar = false;
+
+    clearInterval(timerAutomatico);
+
+    const transicaoSuave =
+        'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
+
+    if (direcao === 1) {
+
+        wrapper.style.transition = transicaoSuave;
+        wrapper.style.transform = 'translateX(-100%)';
+
+        setTimeout(() => {
+
+            wrapper.style.transition = 'none';
+
+            if (wrapper.firstElementChild) {
+                wrapper.appendChild(
+                    wrapper.firstElementChild
+                );
+            }
+
+            wrapper.style.transform = 'translateX(0)';
+
+            podeClicar = true;
+
+            iniciarAutomatico();
+
+        }, 600);
+
+    } else {
+
+        wrapper.style.transition = 'none';
+
+        if (wrapper.lastElementChild) {
+            wrapper.prepend(
+                wrapper.lastElementChild
+            );
+        }
+
+        wrapper.style.transform =
+            'translateX(-100%)';
+
+        setTimeout(() => {
+
+            wrapper.style.transition =
+                transicaoSuave;
+
+            wrapper.style.transform =
+                'translateX(0)';
+
+        }, 50);
+
+        setTimeout(() => {
+
+            podeClicar = true;
+
+            iniciarAutomatico();
+
+        }, 650);
     }
+}
 
-    if (img === '') {
-        img = 'padrao.png';
-    }
 
-    // =========================================================
-    // LÓGICA DE PREÇOS
-    // =========================================================
+// =========================================================
+// CARDS DE PRODUTO
+// =========================================================
 
-    const precos = calcularPrecos(p);
+function criarCartao(produto) {
 
-    const precoTabela = precos.precoDe;
-    const precoAVista = precos.precoVista;
+    const img = obterImagem(
+        produto.img,
+        'padrao.png'
+    );
+
+    const precos = calcularPrecos(produto);
+
+    const precoDe = precos.precoDe;
+    const precoVista = precos.precoVista;
     const precoParcelado = precos.precoParcelado;
 
     const valorParcela =
-        (precoParcelado / 5)
-            .toFixed(2)
-            .replace('.', ',');
-
-
-
-    // =========================================================
-    // HTML DO CARD
-    // =========================================================
+        precoParcelado / 5;
 
     return `
-        <a href="produto/produto.html?nome=${encodeURIComponent(p.nome)}"
-           style="text-decoration:none; color:inherit;">
+        <a
+            href="produto/produto.html?nome=${encodeURIComponent(produto.nome)}"
+            class="link-produto"
+        >
 
             <div class="cartao-produto">
 
@@ -48,258 +122,361 @@ function criarCartao(p) {
 
                 <img
                     src="${img}"
-                    alt="${p.nome}"
+                    alt="${produto.nome}"
+                    loading="lazy"
+                    decoding="async"
                     onerror="this.src='padrao.png'"
                 >
 
-                <h3>${p.nome}</h3>
+                <h3>
+                    ${produto.nome}
+                </h3>
 
-                <div
-                    class="precos-container"
-                    style="margin-top: auto; text-align: center;"
-                >
+                <div class="precos-container">
 
-                    <div
-                        style="
-                            text-decoration: line-through;
-                            color: #999;
-                            font-size: 0.85em;
-                        "
-                    >
+                    <div class="preco-tabela">
                         De:
-                        R$
-                        ${precoTabela.toFixed(2).replace('.', ',')}
+                        R$ ${formatarPreco(precoDe)}
                     </div>
 
-                    <div
-                        style="
-                            color: #666;
-                            font-size: 0.85em;
-                        "
-                    >
+                    <div class="texto-por-apenas">
                         Por apenas
                     </div>
 
-                    <div
-                        style="
-                            color: var(--verde-principal);
-                            font-weight: 900;
-                            font-size: 1.4em;
-                            margin-bottom: 5px;
-                        "
-                    >
-                        R$
-                        ${precoAVista.toFixed(2).replace('.', ',')}
+                    <div class="peco-vista">
 
-                        <small style="font-size:0.5em">
+                        R$
+                        ${formatarPreco(precoVista)}
+
+                        <small class="preco-vista-label">
                             à vista
                         </small>
+
                     </div>
 
-                    <div
-                        style="
-                            color: #444;
-                            font-size: 0.9em;
-                            font-weight: bold;
-                        "
-                    >
-                        ou 5x de R$ ${valorParcela}
+                    <div class="preco-parcelado">
+                        ou 5x de
+                        R$ ${formatarPreco(valorParcela)}
                     </div>
 
-                    <div
-                        style="
-                            color: #888;
-                            font-size: 0.75em;
-                            margin-bottom: 15px;
-                        "
-                    >
+                    <div class="info-parcelamento">
+
                         (R$
-                        ${precoParcelado.toFixed(2).replace('.', ',')}
+                        ${formatarPreco(precoParcelado)}
                         no cartão)
+
                     </div>
 
                     <button
                         class="btn-comprar"
-                        style="width: 100%;"
+                        type="button"
                     >
                         Ver Detalhes
                     </button>
 
                 </div>
+
             </div>
 
         </a>
     `;
 }
 
-// --- CARROSSEL INFINITO E AUTOMÁTICO ---
-const wrapper = document.getElementById('slider-wrapper');
-let podeClicar = true; // Trava de segurança para não bugar se clicar muito rápido
-let timerAutomatico; // Variável que vai guardar o "motorzinho" do modo automático
 
-// 1. Função que faz o carrossel andar sozinho
-function iniciarAutomatico() {
-    // Roda a função mudarSlide para a frente (1) a cada 5000 milissegundos (5 segundos)
-    timerAutomatico = setInterval(() => {
-        mudarSlide(1);
-    }, 5000); 
+// =========================================================
+// BUSCA
+// =========================================================
+
+function fazerBusca() {
+
+    const input =
+        document.getElementById('input-busca');
+
+    if (!input) return;
+
+    const termo =
+        input.value.trim();
+
+    if (!termo) return;
+
+    window.location.href =
+        'catalogo/catalogo.html?busca=' +
+        encodeURIComponent(termo);
 }
 
-// 2. A mágica do Loop Infinito
-function mudarSlide(direcao) {
-    if (!podeClicar) return; // Se a animação ainda estiver rodando, ignora o clique
-    podeClicar = false;
 
-    // Se o usuário clicou, a gente "zera" o relógio automático para não pular dois slides de vez
-    clearInterval(timerAutomatico);
-    iniciarAutomatico();
-
-    // A transição suave original do seu CSS
-    const transicaoSuave = 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
-
-    if (direcao === 1) {
-        // --- INDO PARA A FRENTE (SETA DIREITA) ---
-        wrapper.style.transition = transicaoSuave;
-        wrapper.style.transform = 'translateX(-100%)'; // Empurra para a esquerda
-        
-        // Quando a animação terminar (600ms), fazemos o truque de mágica:
-        setTimeout(() => {
-            wrapper.style.transition = 'none'; // Desliga o movimento suave rapidinho
-            wrapper.appendChild(wrapper.firstElementChild); // Pega o slide que passou e cola no final da fila
-            wrapper.style.transform = 'translateX(0)'; // Volta a caixa para a posição neutra instantaneamente
-            podeClicar = true; // Libera para clicar de novo
-        }, 600);
-
-    } else {
-        // --- INDO PARA TRÁS (SETA ESQUERDA) ---
-        wrapper.style.transition = 'none'; // Desliga o movimento suave
-        wrapper.prepend(wrapper.lastElementChild); // Pega o último slide da fila e joga para o começo
-        wrapper.style.transform = 'translateX(-100%)'; // Esconde ele lá na esquerda instantaneamente
-        
-        // Um mini-atraso de 50ms só para o navegador perceber a mudança antes de animar
-        setTimeout(() => {
-            wrapper.style.transition = transicaoSuave; // Religa o movimento suave
-            wrapper.style.transform = 'translateX(0)'; // Puxa o slide suavemente para o centro da tela
-        }, 50);
-
-        // Libera para clicar de novo quando a animação terminar
-        setTimeout(() => {
-            podeClicar = true;
-        }, 650);
-    }
-}
-
-// 3. Dá a partida no modo automático assim que a página é carregada
-iniciarAutomatico();
+// =========================================================
+// PRODUTOS DA HOME
+// =========================================================
 
 async function carregarDados() {
+
     try {
-        const produtos = await carregarProdutos();
+
+        const produtos =
+            await carregarProdutos();
 
         const produtosDisponiveis =
-            produtos.filter(p => p.estoque > 0);
-
-        const apenasMaquinas =
-            produtosDisponiveis.filter(p =>
-                !p.categoria.toLowerCase().includes('peça') &&
-                !p.categoria.toLowerCase().includes('peca')
+            produtos.filter(
+                produto => produto.estoque > 0
             );
 
-        // DESTAQUES
-        const destaques = [...apenasMaquinas].sort((a, b) => {
-            if (a.estoque === b.estoque) {
-                return Math.random() - 0.5;
-            }
+        const apenasMaquinas =
+            produtosDisponiveis.filter(
+                produto => !ehPeca(produto)
+            );
 
-            return a.estoque - b.estoque;
-        });
+
+        // =====================================================
+        // DESTAQUES
+        // =====================================================
+
+        const destaques =
+            [...apenasMaquinas].sort(
+                (a, b) => {
+
+                    if (
+                        a.estoque === b.estoque
+                    ) {
+                        return Math.random() - 0.5;
+                    }
+
+                    return a.estoque - b.estoque;
+                }
+            );
 
         const gridDest =
-            document.getElementById('grid-destaques');
+            document.getElementById(
+                'grid-destaques'
+            );
 
         if (gridDest) {
+
             gridDest.innerHTML =
                 destaques
                     .slice(0, 3)
-                    .map(p => criarCartao(p))
+                    .map(criarCartao)
                     .join('');
+
         }
 
+
+        // =====================================================
         // LANÇAMENTOS
+        // =====================================================
+
         const lancamentos =
-            apenasMaquinas.slice(-3).reverse();
+            apenasMaquinas
+                .slice(-3)
+                .reverse();
 
         const gridLanc =
-            document.getElementById('grid-lancamentos');
+            document.getElementById(
+                'grid-lancamentos'
+            );
 
         if (gridLanc) {
+
             gridLanc.innerHTML =
                 lancamentos.length > 0
-                    ? lancamentos.map(p => criarCartao(p)).join('')
+                    ? lancamentos
+                        .map(criarCartao)
+                        .join('')
                     : '<p>Nenhum lançamento recente.</p>';
+
         }
 
+
+        // =====================================================
         // PROMOÇÕES
+        // =====================================================
+
         const promocoes =
-            apenasMaquinas.filter(p =>
-                p.precoAntigo > p.preco
+            apenasMaquinas.filter(
+                produto =>
+                    produto.precoDe >
+                    produto.precoVista
             );
 
         const gridProm =
-            document.getElementById('grid-promocoes');
+            document.getElementById(
+                'grid-promocoes'
+            );
 
         if (gridProm) {
+
             gridProm.innerHTML =
                 promocoes.length > 0
                     ? promocoes
                         .slice(0, 3)
-                        .map(p => criarCartao(p))
+                        .map(criarCartao)
                         .join('')
                     : '<p>Nenhuma oferta ativa no momento.</p>';
+
         }
 
     } catch (erro) {
+
         console.error(
             'Erro ao carregar produtos:',
             erro
         );
+
     }
 }
 
-window.onload = () => { carregarDados(); atualizarContador(); };
 
-// ... (O resto do seu código do carrossel continua igualzinho aqui pra baixo) ...
-document.addEventListener('DOMContentLoaded', () => {
-    const track = document.getElementById('track-marcas');
-    const btnNext = document.getElementById('btn-next');
-    const btnPrev = document.getElementById('btn-prev');
+// =========================================================
+// CARROSSEL DE MARCAS
+// =========================================================
+
+function inicializarCarrosselMarcas() {
+
+    const track =
+        document.getElementById(
+            'track-marcas'
+        );
+
+    const btnNext =
+        document.getElementById(
+            'btn-next'
+        );
+
+    const btnPrev =
+        document.getElementById(
+            'btn-prev'
+        );
+
+    if (!track || !btnNext || !btnPrev) {
+        return;
+    }
+
     let isAnimating = false;
-    btnNext.addEventListener('click', () => {
-        if (isAnimating) return;
-        isAnimating = true;
-        const firstItem = track.firstElementChild;
-        const itemWidth = firstItem.offsetWidth + 60; 
-        track.style.transition = 'transform 0.4s ease-in-out';
-        track.style.transform = `translateX(-${itemWidth}px)`;
-        setTimeout(() => {
-            track.style.transition = 'none'; 
-            track.appendChild(firstItem); 
-            track.style.transform = 'translateX(0)'; 
-            isAnimating = false;
-        }, 400); 
-    });
-    btnPrev.addEventListener('click', () => {
-        if (isAnimating) return;
-        isAnimating = true;
-        const lastItem = track.lastElementChild;
-        const firstItem = track.firstElementChild;
-        const itemWidth = firstItem.offsetWidth + 60;
-        track.insertBefore(lastItem, firstItem);
-        track.style.transition = 'none';
-        track.style.transform = `translateX(-${itemWidth}px)`;
-        void track.offsetWidth;
-        track.style.transition = 'transform 0.4s ease-in-out';
-        track.style.transform = 'translateX(0)';
-        setTimeout(() => { isAnimating = false; }, 400);
-    });
-});
+
+
+    // ---------------------------------------------------------
+    // PRÓXIMO
+    // ---------------------------------------------------------
+
+    btnNext.addEventListener(
+        'click',
+        () => {
+
+            if (isAnimating) return;
+
+            const firstItem =
+                track.firstElementChild;
+
+            if (!firstItem) return;
+
+            isAnimating = true;
+
+            const itemWidth =
+                firstItem.offsetWidth + 60;
+
+            track.style.transition =
+                'transform 0.4s ease-in-out';
+
+            track.style.transform =
+                `translateX(-${itemWidth}px)`;
+
+
+            setTimeout(() => {
+
+                track.style.transition =
+                    'none';
+
+                track.appendChild(
+                    firstItem
+                );
+
+                track.style.transform =
+                    'translateX(0)';
+
+                isAnimating = false;
+
+            }, 400);
+
+        }
+    );
+
+
+    // ---------------------------------------------------------
+    // ANTERIOR
+    // ---------------------------------------------------------
+
+    btnPrev.addEventListener(
+        'click',
+        () => {
+
+            if (isAnimating) return;
+
+            const firstItem =
+                track.firstElementChild;
+
+            const lastItem =
+                track.lastElementChild;
+
+            if (!firstItem || !lastItem) {
+                return;
+            }
+
+            isAnimating = true;
+
+            const itemWidth =
+                firstItem.offsetWidth + 60;
+
+            track.insertBefore(
+                lastItem,
+                firstItem
+            );
+
+            track.style.transition =
+                'none';
+
+            track.style.transform =
+                `translateX(-${itemWidth}px)`;
+
+            void track.offsetWidth;
+
+            track.style.transition =
+                'transform 0.4s ease-in-out';
+
+            track.style.transform =
+                'translateX(0)';
+
+
+            setTimeout(() => {
+
+                isAnimating = false;
+
+            }, 400);
+
+        }
+    );
+}
+
+
+// =========================================================
+// INICIALIZAÇÃO
+// =========================================================
+
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+
+        inicializarCarrosselMarcas();
+
+        iniciarAutomatico();
+
+    }
+);
+
+window.addEventListener(
+    'load',
+    () => {
+
+        carregarDados();
+
+    }
+);
