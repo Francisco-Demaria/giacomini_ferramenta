@@ -98,3 +98,43 @@
         grid-template-columns: 1fr;
     }
 }
+/* =========================================================
+   BOTÃO VOLTAR
+   ========================================================= */
+
+.barra-voltar {
+    width: min(100% - 40px, 1200px);
+    margin: 20px auto 0;
+}
+
+.btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    background: var(--branco);
+    color: var(--preto);
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    text-decoration: none;
+    font-weight: 600;
+
+    transition: var(--transicao);
+}
+
+.btn-voltar:hover {
+    background: var(--verde-principal);
+    color: var(--branco);
+    border-color: var(--verde-principal);
+    transform: translateX(-2px);
+}
+
+@media (max-width: 600px) {
+    .barra-voltar {
+        width: calc(100% - 20px);
+    }
+}

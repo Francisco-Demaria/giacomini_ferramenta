@@ -1,47 +1,38 @@
-const MARGEM_VISTA = 1.30;
-const MARGEM_PARCELADO = 1.50;
-const MARGEM_TABELA = 1.70;
-
 function calcularPrecos(produto) {
-    const custo = Number(produto.preco) || 0;
-    const valorEspecial = Number(produto.precoAntigo) || 0;
 
-    // ==========================================
-    // PRODUTO NORMAL
-    // ==========================================
+    const precoVista =
+        Number(produto.precoVista) || 0;
 
-    if (valorEspecial <= 0) {
-        const precoVista =
-            Math.floor(custo * MARGEM_VISTA) + 0.99;
+    const precoParcelado =
+        Number(produto.precoParcelado) || 0;
 
-        const precoParcelado =
-            Math.floor(custo * MARGEM_PARCELADO) + 0.99;
-
-        const precoDe =
-            Math.floor(custo * MARGEM_TABELA) + 0.99;
-
-        return {
-            precoVista,
+    /*
+     * Por enquanto, usamos o preço parcelado
+     * também como referência visual do "De".
+     *
+     * Depois podemos reformular o card para
+     * não exibir "De" caso você prefira.
+     */
+    const precoDe =
+        Math.max(
             precoParcelado,
-            precoDe,
-            possuiPrecoEspecial: false
-        };
-    }
-
-    // ==========================================
-    // PRODUTO COM PREÇO ESPECIAL
-    // ==========================================
+            precoVista
+        );
 
     return {
-        precoVista: custo,
-        precoParcelado: valorEspecial,
-        precoDe: custo * 1.7,
-        possuiPrecoEspecial: true
+        precoVista,
+        precoParcelado,
+        precoDe,
+        possuiPrecoEspecial:
+            precoParcelado >
+            precoVista
     };
 }
 
+
 function formatarPreco(valor) {
-    return Number(valor)
+
+    return Number(valor || 0)
         .toFixed(2)
         .replace('.', ',');
 }
