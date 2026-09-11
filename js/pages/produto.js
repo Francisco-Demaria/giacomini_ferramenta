@@ -27,7 +27,7 @@ async function carregarProduto() {
         // Verifica ANTES de tentar acessar o produto
         if (!produto) {
             document.getElementById('detalhes-produto').innerHTML =
-                '<p class="mensagem-carregando">Produto não encontrado ou sem estoque.</p>';
+                '<p class="mensagem-carregando">Produto não encontrado.</p>';
             return;
         }
 
@@ -258,10 +258,10 @@ function carregarRecomendados(todosProdutos, produtoAtual) {
     const container = document.getElementById('grid-recomendados');
     if (!container) return;
 
-    let recomendados = todosProdutos.filter(p => p.categoria === produtoAtual.categoria && p.nome !== produtoAtual.nome && p.estoque > 0);
+    let recomendados = todosProdutos.filter(p => p.categoria === produtoAtual.categoria && p.nome !== produtoAtual.nome && p.disponivel !== false);
     
     if (recomendados.length === 0) {
-        recomendados = todosProdutos.filter(p => p.nome !== produtoAtual.nome && p.estoque > 0);
+        recomendados = todosProdutos.filter(p => p.nome !== produtoAtual.nome && p.disponivel !== false);
     }
 
     recomendados = recomendados.sort(() => Math.random() - 0.5);

@@ -216,10 +216,9 @@ async function carregarDados() {
         const produtos =
             await carregarProdutos();
 
-        const produtosDisponiveis =
-            produtos.filter(
-                produto => produto.estoque > 0
-            );
+        const produtosDisponiveis = produtos.filter(
+            produto => produto.disponivel !== false
+        );
 
         const apenasMaquinas =
             produtosDisponiveis.filter(
@@ -231,19 +230,9 @@ async function carregarDados() {
         // DESTAQUES
         // =====================================================
 
-        const destaques =
-            [...apenasMaquinas].sort(
-                (a, b) => {
-
-                    if (
-                        a.estoque === b.estoque
-                    ) {
-                        return Math.random() - 0.5;
-                    }
-
-                    return a.estoque - b.estoque;
-                }
-            );
+        const destaques = [...apenasMaquinas].sort(
+            () => Math.random() - 0.5
+        );
 
         const gridDest =
             document.getElementById(

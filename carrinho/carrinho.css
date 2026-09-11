@@ -129,3 +129,7 @@
         font-size: 0.9rem;
     }
 }
+
+/* Acabamento visual do carrinho */
+.container { width:min(100% - 40px,1000px); margin:42px auto; }.topo-carrinho { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:24px; }.topo-carrinho h1 { color:var(--verde-escuro); font-size:clamp(1.7rem,4vw,2.3rem); }.topo-carrinho .btn-voltar { margin:0; }.item-carrinho { border:1px solid var(--borda); border-radius:var(--raio); box-shadow:0 3px 10px rgba(16,43,25,.035); }.img-cart { border:1px solid #edf0ed; background:#fff; }.item-info h3 { color:var(--grafite); }.item-preco { color:var(--verde-principal); font-size:1.08rem; }.btn-remover { cursor:pointer; }.area-total { display:grid; grid-template-columns:1fr auto; align-items:center; gap:10px 30px; border:1px solid var(--borda); }.total-texto { color:#68736b; font-weight:700; }.btn-whatsapp { grid-column:1 / -1; display:flex; justify-content:center; gap:9px; padding:15px; border-radius:8px; background:#25d366; color:#fff; font-weight:800; text-decoration:none; transition:var(--transicao); }.btn-whatsapp:hover { background:#1da955; transform:translateY(-2px); }.carrinho-vazio { border:1px solid var(--borda); }
+@media (max-width:600px) { .container { width:calc(100% - 24px); margin:25px auto; }.topo-carrinho { align-items:flex-start; flex-direction:column-reverse; gap:12px; }.item-carrinho { align-items:flex-start; flex-wrap:wrap; }.info-produto-cart { min-width:0; }.item-preco { margin-left:auto; }.area-total { grid-template-columns:1fr; gap:5px; } }

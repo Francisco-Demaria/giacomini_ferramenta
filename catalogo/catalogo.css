@@ -819,3 +819,13 @@
     }
 
 }
+
+/* Acabamento visual do catálogo */
+.layout-catalogo { max-width:1280px; gap:26px; margin:26px auto 55px; }
+.menu-lateral-filtros { width:265px; padding:22px; border:1px solid var(--borda); border-radius:var(--raio); box-shadow:var(--sombra); }
+.menu-lateral-filtros h3 { color:var(--verde-escuro); font-size:1.15rem; }
+.grupo-filtro { margin-bottom:22px; padding-bottom:20px; border-bottom:1px solid #edf0ed; }.grupo-filtro:last-child { border-bottom:0; padding-bottom:0; }
+.grupo-filtro h4 { color:var(--grafite); font-size:.78rem; letter-spacing:.06em; }.grupo-filtro label { padding:4px 0; color:#5c675f; }.grupo-filtro select,.grupo-filtro input[type="number"] { border-color:var(--borda) !important; border-radius:7px !important; }.grupo-filtro select:focus,.grupo-filtro input[type="number"]:focus { outline:2px solid rgba(36,168,90,.25); border-color:var(--verde-principal) !important; }
+#lista-maquinas { gap:22px; padding-top:0; }.btn-voltar { border-color:var(--borda); border-radius:8px; background:#fff; color:var(--verde-escuro); box-shadow:0 2px 6px rgba(0,0,0,.03); }.btn-voltar:hover { background:var(--verde-principal); }
+.sanfona-subcategoria,.grupo-sanfona { border-color:var(--borda); border-radius:10px; }.sanfona-subcategoria { background:#fff; color:var(--verde-escuro); }.sanfona-subcategoria:hover { background:var(--verde-suave); }.item-peca-simples { border-color:var(--borda); box-shadow:none; }.preco-peca { color:var(--verde-principal); }
+@media (max-width:768px) { .layout-catalogo { margin-top:18px; }.menu-lateral-filtros { width:100%; }.grupo-filtro label { display:inline-flex; margin-right:16px; }.grupo-filtro { padding-bottom:13px; } }

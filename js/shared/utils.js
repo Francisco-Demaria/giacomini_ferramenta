@@ -1,3 +1,14 @@
+function escaparHTML(valor) {
+    return String(valor ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+window.escaparHTML = escaparHTML;
+
 function formatarPreco(valor) {
     return Number(valor || 0)
         .toFixed(2)

@@ -68,8 +68,8 @@ function normalizarProduto(produto) {
         img:
             produto.imagem || produto.img || '',
 
-        estoque:
-            parseInt(produto.estoque, 10) || 0,
+        disponivel:
+            produto.disponivel !== false,
 
         descricao:
             produto.descricao || '',

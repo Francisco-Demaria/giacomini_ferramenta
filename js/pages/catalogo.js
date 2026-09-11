@@ -158,7 +158,7 @@ async function carregarCatalogo() {
         const produtosCarregados = await carregarProdutos();
 
         let produtos = produtosCarregados.filter(
-            p => p.estoque > 0
+            p => p.disponivel !== false
         );
 
         todosProdutos = [...produtos];
@@ -301,9 +301,7 @@ if (containerMaquinas) {
                                             <br>
 
                                             <span class="descricao-peca">
-                                                Estoque:
-                                                ${p.estoque}
-                                                |
+                                                Disponível sob encomenda |
                                                 ${p.descricao}
                                             </span>
 
@@ -440,7 +438,7 @@ window.aplicarSuperFiltro = function() {
                                 <div class="linha-peca">
                                     <div>
                                         <strong class="nome-peca-sanfona">${p.nome}</strong><br>
-                                        <span class="info-peca-sanfona">Estoque: ${p.estoque} | ${p.descricao}</span>
+                                        <span class="info-peca-sanfona">Disponível sob encomenda | ${p.descricao}</span>
                                     </div>
                                     <div style="text-align: right; min-width: 100px;">
                                         <strong style="color: var(--verde-destaque); font-size: 1.1em; display: block; margin-bottom: 5px;">R$ ${p.precoVista.toFixed(2).replace('.',',')}</strong>

@@ -138,3 +138,7 @@
         width: calc(100% - 20px);
     }
 }
+
+/* Acabamento visual da página de produto */
+#detalhes-produto { margin:28px auto 45px; }.layout-detalhe-produto { border:1px solid var(--borda); overflow:hidden; }.imagem-detalhe-container { min-height:410px; padding:24px; background:linear-gradient(145deg,#fff,#f0f5f0); }.imagem-detalhe-container img { max-width:100%; }.info-detalhe-container { padding:20px !important; }.info-detalhe-container h2 { color:var(--grafite) !important; line-height:1.18; }.bloco-precos { border-color:var(--borda) !important; border-left:4px solid var(--verde-destaque) !important; box-shadow:none !important; }.info-detalhe-descricao { color:#5c675f !important; }.btn-adicionar-carrinho { border-radius:9px !important; box-shadow:0 8px 16px rgba(18,107,56,.16); }.secao-recomendados { width:min(100% - 40px,1200px); margin:0 auto; }.secao-recomendados h2 { color:var(--verde-escuro); font-size:1.65rem; text-align:center; }.secao-recomendados h2::after { display:block; width:42px; height:3px; margin:10px auto 26px; border-radius:99px; background:var(--verde-destaque); content:""; }
+@media (max-width:600px) { .imagem-detalhe-container { min-height:280px; }.secao-recomendados { width:calc(100% - 20px); } }

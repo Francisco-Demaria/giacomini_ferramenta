@@ -1,0 +1,8 @@
+# Configuração exclusiva do servidor (Hostinger)
+/config/banco.php
+/config/*.local.php
+
+# Planilhas de fornecedores nunca pertencem ao site/repositório
+/admin/uploads/importacoes/*
+!/admin/uploads/importacoes/.htaccess
+!/admin/uploads/importacoes/.gitkeep
