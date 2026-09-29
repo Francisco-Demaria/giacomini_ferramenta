@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo V2 | Giacomini</title>
-
+    <title>Catálogo Completo | Giacomini — TESTE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/componentes.css">
+    <link rel="stylesheet" href="../catalogo/catalogo.css">
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/menu.css">
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/responsivo.css">
 </head>
 <body>
+
 <header>
-    <button class="btn-menu" id="btn-menu">
-        <i class="fas fa-bars"></i> Menu
+    <button class="btn-menu" onclick="abrirMenu()">
+        <i class="fas fa-bars" style="font-size: 1.5em;"></i> Menu
     </button>
 
-    <a href="./index.html" class="logo-container">
+    <a href="index.html" class="logo-container">
         <img src="../images.jfif" alt="Giacomini" class="logo-img" onerror="this.src='../padrao.png'">
         <span class="logo-texto">Giacomini</span>
     </a>
 
-    <a href="./carrinho2.html" class="icone-carrinho-topo" title="Ir para o Carrinho">
+    <a href="carrinho2.html" class="icone-carrinho-topo" title="Ir para o Carrinho">
         <i class="fas fa-shopping-cart"></i>
         <span id="contador-carrinho" class="badge-carrinho">0</span>
     </a>
@@ -32,68 +33,83 @@
 
 <div class="faixa-pesquisa">
     <div class="box-pesquisa">
-        <input type="text" id="input-busca" placeholder="Buscar no catálogo...">
-        <button id="btn-busca"><i class="fas fa-search"></i></button>
+        <input type="text" id="input-busca" placeholder="Encontre furadeiras, peças, marteletes..." onkeypress="if(event.key === 'Enter') fazerBusca2()">
+        <button onclick="fazerBusca2()"><i class="fas fa-search"></i></button>
     </div>
 </div>
+
+<div id="overlay" onclick="fecharMenu()"></div>
 
 <nav id="menu-lateral" class="gaveta">
     <div class="gaveta-header">
         <h2>Navegação</h2>
-        <button class="btn-fechar-menu" id="btn-fechar-menu"><i class="fas fa-times"></i></button>
+        <button class="btn-fechar-menu" onclick="fecharMenu()"><i class="fas fa-times"></i></button>
     </div>
     <div class="menu-links">
-        <a href="./index.html"><i class="fas fa-home"></i> Início</a>
-        <a href="./catalogo2.html"><i class="fas fa-tools"></i> Catálogo V2</a>
-        <a href="./carrinho2.html"><i class="fas fa-shopping-cart"></i> Meu Carrinho</a>
+        <a href="index.html"><i class="fas fa-home"></i> Início</a>
+        <a href="../sobre/sobre.html"><i class="fas fa-industry"></i> Quem Somos</a>
+        <a href="catalogo2.html"><i class="fas fa-tools"></i> Catálogo Completo</a>
+        <a href="carrinho2.html"><i class="fas fa-shopping-cart"></i> Meu Carrinho</a>
+        <a href="https://wa.me/5547989050263" target="_blank"><i class="fab fa-whatsapp"></i> Assistência Técnica</a>
     </div>
 </nav>
 
 <main>
-    <div style="max-width:1200px;margin:0 auto;padding:20px;">
-        <a href="./index.html" class="btn-voltar">← Voltar</a>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 20px 20px 0 20px;">
+        <a href="index.html" class="btn-voltar">← Voltar para a Loja</a>
     </div>
 
     <div class="layout-catalogo">
         <aside class="menu-lateral-filtros">
-            <h3>Filtros</h3>
+            <h3 style="margin-bottom: 15px; font-size: 1.2em; border-bottom: 2px solid #eee; padding-bottom: 10px;">Filtros</h3>
 
             <div class="grupo-filtro">
-                <h4>Preço</h4>
-                <div style="display:flex;gap:5px;">
-                    <input type="number" id="preco-min" placeholder="Mín">
-                    <input type="number" id="preco-max" placeholder="Máx">
+                <h4>Faixa de Preço (R$)</h4>
+                <div style="display: flex; gap: 5px; align-items: center; margin-bottom: 10px;">
+                    <input type="number" id="preco-min" placeholder="Mín" style="width: 45%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                    <span style="color: #666;">-</span>
+                    <input type="number" id="preco-max" placeholder="Máx" style="width: 45%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                 </div>
             </div>
 
             <div class="grupo-filtro">
-                <h4>Ordenar</h4>
+                <h4>Ordenar por</h4>
                 <select id="filtro-ordem">
-                    <option value="relevantes">Mais relevantes</option>
-                    <option value="menor-preco">Menor preço</option>
-                    <option value="maior-preco">Maior preço</option>
-                    <option value="nome">Nome</option>
+                    <option value="relevantes">Mais Relevantes</option>
+                    <option value="menor-preco">Menor Preço</option>
+                    <option value="maior-preco">Maior Preço</option>
                 </select>
             </div>
 
             <div class="grupo-filtro">
-                <h4>Categoria</h4>
-                <select id="filtro-categoria">
-                    <option value="">Todas</option>
-                </select>
+                <h4>Categorias</h4>
+                <div id="filtros-categorias2"></div>
             </div>
         </aside>
 
         <section class="conteudo-principal">
             <div id="estado-catalogo"></div>
-            <div id="lista-produtos" class="grid-produtos"></div>
+
+            <section id="sessao-maquinas">
+                <div id="lista-maquinas" class="grid-produtos"></div>
+            </section>
+
+            <section id="sessao-pecas">
+                <div id="container-grupos-pecas"></div>
+            </section>
         </section>
     </div>
 </main>
 
+<a href="https://wa.me/5547989050263" class="btn-zap-flutuante" target="_blank" title="Fale no WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<script src="../js/shared/utils.js"></script>
 <script src="../js/shared/menu.js"></script>
 <script src="../js/shared/carrinho-ui.js"></script>
 <script src="../js/test/produtos2.js"></script>
 <script src="../js/test/catalogo2.js"></script>
+
 </body>
 </html>
